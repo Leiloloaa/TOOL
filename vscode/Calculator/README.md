@@ -1,6 +1,6 @@
-# Calculator Helper - VSCode 插件
+# Code Inline Calculator - VSCode 插件
 
-一个智能的VSCode插件，可以自动识别和计算数学表达式，支持多种运算符和复杂计算。
+这是一款代码内联计算器，可以自动识别和计算数学表达式，支持多种运算符和复杂计算。
 
 ## 功能特性
 

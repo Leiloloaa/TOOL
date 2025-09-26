@@ -1,10 +1,10 @@
 import * as vscode from "vscode";
 
 export function activate(context: vscode.ExtensionContext) {
-  console.log("Calculator Helper 插件已激活");
+  console.log("Code Inline Calculator 插件已激活");
 
   // 显示激活消息
-  vscode.window.showInformationMessage("Calculator Helper 插件已激活！");
+  vscode.window.showInformationMessage("Code Inline Calculator 插件已激活！");
 
   // 创建计算器提供者
   const calculatorProvider = new CalculatorProvider();
@@ -73,8 +73,8 @@ class CalculatorProvider
       100
     );
     this.statusBarItem.command = "calculator-helper.calculate";
-    this.statusBarItem.text = "$(symbol-numeric) Calculator Helper";
-    this.statusBarItem.tooltip = "Calculator Helper - 点击查看计算结果";
+    this.statusBarItem.text = "$(symbol-numeric) Code Inline Calculator";
+    this.statusBarItem.tooltip = "Code Inline Calculator - 点击查看计算结果";
     this.statusBarItem.show();
 
     console.log("状态栏已创建");
@@ -148,7 +148,7 @@ class CalculatorProvider
         this.updateCodeLenses(document, position.line, expression, result);
       }
     } else {
-      this.statusBarItem.text = "$(symbol-numeric) Calculator Helper";
+      this.statusBarItem.text = "$(symbol-numeric) Code Inline Calculator";
       console.log(`未找到表达式，状态栏重置`);
       this.clearCodeLenses();
     }
@@ -442,5 +442,5 @@ class CalculatorProvider
 }
 
 export function deactivate() {
-  console.log("Calculator Helper 插件已停用");
+  console.log("Code Inline Calculator 插件已停用");
 }

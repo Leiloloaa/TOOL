@@ -3,9 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deactivate = exports.activate = void 0;
 const vscode = require("vscode");
 function activate(context) {
-    console.log("Calculator Helper 插件已激活");
+    console.log("Code Inline Calculator 插件已激活");
     // 显示激活消息
-    vscode.window.showInformationMessage("Calculator Helper 插件已激活！");
+    vscode.window.showInformationMessage("Code Inline Calculator 插件已激活！");
     // 创建计算器提供者
     const calculatorProvider = new CalculatorProvider();
     // 注册悬停提供者
@@ -38,8 +38,8 @@ class CalculatorProvider {
         // 创建状态栏项
         this.statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
         this.statusBarItem.command = "calculator-helper.calculate";
-        this.statusBarItem.text = "$(symbol-numeric) Calculator Helper";
-        this.statusBarItem.tooltip = "Calculator Helper - 点击查看计算结果";
+        this.statusBarItem.text = "$(symbol-numeric) Code Inline Calculator";
+        this.statusBarItem.tooltip = "Code Inline Calculator - 点击查看计算结果";
         this.statusBarItem.show();
         console.log("状态栏已创建");
     }
@@ -95,7 +95,7 @@ class CalculatorProvider {
             }
         }
         else {
-            this.statusBarItem.text = "$(symbol-numeric) Calculator Helper";
+            this.statusBarItem.text = "$(symbol-numeric) Code Inline Calculator";
             console.log(`未找到表达式，状态栏重置`);
             this.clearCodeLenses();
         }
@@ -315,7 +315,7 @@ class CalculatorProvider {
     }
 }
 function deactivate() {
-    console.log("Calculator Helper 插件已停用");
+    console.log("Code Inline Calculator 插件已停用");
 }
 exports.deactivate = deactivate;
 //# sourceMappingURL=extension.js.map
