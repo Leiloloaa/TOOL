@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>开发工具助手</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <h1>🛠️ 开发工具助手</h1>
+        <p class="subtitle">提升开发效率的浏览器工具</p>
+      </header>
+
+      <main class="main">
+        <div class="feature-grid">
+          <div class="feature-card">
+            <div class="feature-icon">🔍</div>
+            <h3>页面分析</h3>
+            <p>分析当前页面的DOM结构和性能</p>
+            <button id="analyzePage" class="btn btn-primary">开始分析</button>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <h3>性能监控</h3>
+            <p>监控页面加载时间和资源使用</p>
+            <button id="monitorPerformance" class="btn btn-secondary">
+              开始监控
+            </button>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">🎨</div>
+            <h3>样式调试</h3>
+            <p>快速调试CSS样式和布局</p>
+            <button id="debugStyles" class="btn btn-accent">调试样式</button>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <h3>快速操作</h3>
+            <p>常用的开发快捷操作</p>
+            <button id="quickActions" class="btn btn-info">快速操作</button>
+          </div>
+        </div>
+
+        <div class="status-section">
+          <h3>当前状态</h3>
+          <div id="statusInfo" class="status-info">
+            <span class="status-indicator"></span>
+            <span class="status-text">就绪</span>
+          </div>
+        </div>
+      </main>
+
+      <footer class="footer">
+        <div class="footer-links">
+          <a href="options.html" target="_blank">设置</a>
+          <a href="#" id="helpLink">帮助</a>
+        </div>
+        <p class="version">版本 1.0.0</p>
+      </footer>
+    </div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>开发工具助手 - 设置</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <h1>🛠️ 开发工具助手设置</h1>
+        <p class="subtitle">自定义您的开发体验</p>
+      </header>
+
+      <main class="main">
+        <form id="settingsForm" class="settings-form">
+          <section class="settings-section">
+            <h2>基本设置</h2>
+
+            <div class="setting-item">
+              <label class="setting-label">
+                <input type="checkbox" id="autoAnalyze" name="autoAnalyze" />
+                <span class="checkmark"></span>
+                自动分析页面
+              </label>
+              <p class="setting-description">页面加载时自动进行性能分析</p>
+            </div>
+
+            <div class="setting-item">
+              <label class="setting-label">
+                <input
+                  type="checkbox"
+                  id="showNotifications"
+                  name="showNotifications"
+                />
+                <span class="checkmark"></span>
+                显示通知
+              </label>
+              <p class="setting-description">在分析完成时显示桌面通知</p>
+            </div>
+
+            <div class="setting-item">
+              <label class="setting-label">
+                <input type="checkbox" id="debugMode" name="debugMode" />
+                <span class="checkmark"></span>
+                调试模式
+              </label>
+              <p class="setting-description">启用详细的调试信息输出</p>
+            </div>
+          </section>
+
+          <section class="settings-section">
+            <h2>性能设置</h2>
+
+            <div class="setting-item">
+              <label for="analysisInterval" class="setting-label"
+                >分析间隔 (秒)</label
+              >
+              <input
+                type="number"
+                id="analysisInterval"
+                name="analysisInterval"
+                min="1"
+                max="300"
+                value="30"
+                class="setting-input"
+              />
+              <p class="setting-description">自动分析的间隔时间</p>
+            </div>
+
+            <div class="setting-item">
+              <label for="maxElements" class="setting-label">最大元素数</label>
+              <input
+                type="number"
+                id="maxElements"
+                name="maxElements"
+                min="100"
+                max="10000"
+                value="1000"
+                class="setting-input"
+              />
+              <p class="setting-description">分析时处理的最大DOM元素数量</p>
+            </div>
+          </section>
+
+          <section class="settings-section">
+            <h2>界面设置</h2>
+
+            <div class="setting-item">
+              <label for="theme" class="setting-label">主题</label>
+              <select id="theme" name="theme" class="setting-select">
+                <option value="light">浅色主题</option>
+                <option value="dark">深色主题</option>
+                <option value="auto">自动</option>
+              </select>
+              <p class="setting-description">选择扩展的显示主题</p>
+            </div>
+
+            <div class="setting-item">
+              <label for="language" class="setting-label">语言</label>
+              <select id="language" name="language" class="setting-select">
+                <option value="zh-CN">中文</option>
+                <option value="en-US">English</option>
+              </select>
+              <p class="setting-description">选择扩展的显示语言</p>
+            </div>
+          </section>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">保存设置</button>
+            <button type="button" id="resetSettings" class="btn btn-secondary">
+              重置设置
+            </button>
+            <button type="button" id="exportSettings" class="btn btn-info">
+              导出设置
+            </button>
+          </div>
+        </form>
+      </main>
+
+      <footer class="footer">
+        <div class="footer-info">
+          <p>开发工具助手 v1.0.0</p>
+          <p>© 2024 开发工具助手. 保留所有权利.</p>
+        </div>
+      </footer>
+    </div>
+
+    <script src="options.js"></script>
+  </body>
+</html>
