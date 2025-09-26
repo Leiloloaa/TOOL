@@ -1,5 +1,9 @@
 # 创建 VSCode 发布者指南
 
+## 插件市场
+
+https://marketplace.visualstudio.com/items?itemName=devtools-helper.code-inline-calculator
+
 ## 创建 token
 
 https://dev.azure.com/cailei1234567/_usersSettings/tokens

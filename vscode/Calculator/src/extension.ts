@@ -197,10 +197,12 @@ class CalculatorProvider
 
         vscode.workspace.applyEdit(edit);
 
-        // 显示替换提示
-        vscode.window.showInformationMessage(
-          `表达式已替换: ${expression} → ${result}`
-        );
+        // 显示替换提示（2秒后自动消失）
+        const originalText = this.statusBarItem.text;
+        this.statusBarItem.text = `$(check) 表达式已替换: ${expression} → ${result}`;
+        setTimeout(() => {
+          this.statusBarItem.text = originalText;
+        }, 2000);
       }
     }
   }
@@ -243,10 +245,12 @@ class CalculatorProvider
 
     vscode.workspace.applyEdit(edit);
 
-    // 显示替换提示
-    vscode.window.showInformationMessage(
-      `表达式已替换: ${expression} → ${result}`
-    );
+    // 显示替换提示（2秒后自动消失）
+    const originalText = this.statusBarItem.text;
+    this.statusBarItem.text = `$(check) 表达式已替换: ${expression} → ${result}`;
+    setTimeout(() => {
+      this.statusBarItem.text = originalText;
+    }, 2000);
   }
 
   private findMathExpression(
