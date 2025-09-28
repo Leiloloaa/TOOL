@@ -65,6 +65,10 @@ class CalculatorProvider
   private statusBarItem: vscode.StatusBarItem;
   private lastCalculation: string = "";
   private codeLenses: vscode.CodeLens[] = [];
+  private currentQuickPick: vscode.QuickPick<vscode.QuickPickItem> | null =
+    null;
+  private debounceTimer: NodeJS.Timeout | null = null;
+  private isReplacing: boolean = false;
 
   constructor() {
     // 创建状态栏项
@@ -85,41 +89,28 @@ class CalculatorProvider
     position: vscode.Position,
     token: vscode.CancellationToken
   ): vscode.ProviderResult<vscode.Hover> {
-    const line = document.lineAt(position.line);
-    const text = line.text;
-
-    console.log(
-      `悬停检测: 行文本 = "${text}", 光标位置 = ${position.character}`
-    );
-
-    // 查找当前位置附近的数学表达式
-    const expression = this.findMathExpression(text, position.character);
-    console.log(`悬停找到的表达式: ${expression}`);
-
-    if (expression) {
-      const result = this.calculateExpression(expression);
-      console.log(`悬停计算结果: ${result}`);
-      if (result !== null) {
-        this.lastCalculation = `${expression} = ${result}`;
-        this.statusBarItem.text = `$(symbol-numeric) ${this.lastCalculation}`;
-        this.statusBarItem.tooltip = `计算结果: ${this.lastCalculation}`;
-
-        const markdown = new vscode.MarkdownString();
-        markdown.appendMarkdown(`## 计算结果\n\n`);
-        markdown.appendMarkdown(`**${expression} = ${result}**`);
-        markdown.appendMarkdown(`\n\n---\n`);
-        markdown.appendMarkdown(`点击状态栏查看详细计算`);
-
-        console.log(`返回悬停提示`);
-        return new vscode.Hover(markdown);
-      }
-    }
-
-    console.log(`悬停未找到表达式`);
+    // 悬停功能已屏蔽
     return null;
   }
 
   onDocumentChange(event: vscode.TextDocumentChangeEvent) {
+    // 如果正在替换表达式，忽略文档变化事件
+    if (this.isReplacing) {
+      console.log("正在替换表达式，忽略文档变化事件");
+      return;
+    }
+
+    // 检查是否是替换操作导致的变化（通过检查变化内容是否为纯数字）
+    if (event.contentChanges.length > 0) {
+      const change = event.contentChanges[0];
+      const newText = change.text;
+      // 如果新文本是纯数字（可能是替换结果），跳过弹框
+      if (/^\d+(\.\d+)?$/.test(newText.trim())) {
+        console.log("检测到数字替换，跳过弹框");
+        return;
+      }
+    }
+
     // 当文档内容变化时，检查是否有新的数学表达式
     const activeEditor = vscode.window.activeTextEditor;
     if (!activeEditor) return;
@@ -144,13 +135,21 @@ class CalculatorProvider
         this.statusBarItem.tooltip = `计算结果: ${this.lastCalculation}`;
         console.log(`状态栏更新: ${this.statusBarItem.text}`);
 
-        // 更新代码镜头显示内联结果
-        this.updateCodeLenses(document, position.line, expression, result);
+        // 更新代码镜头显示内联结果（已屏蔽）
+        // this.updateCodeLenses(document, position.line, expression, result);
+
+        // 使用防抖机制，避免频繁弹框
+        if (this.debounceTimer) {
+          clearTimeout(this.debounceTimer);
+        }
+        this.debounceTimer = setTimeout(() => {
+          this.showPathLikeTooltip(expression, result, position);
+        }, 50);
       }
     } else {
       this.statusBarItem.text = "$(symbol-numeric) Code Inline Calculator";
       console.log(`未找到表达式，状态栏重置`);
-      this.clearCodeLenses();
+      // this.clearCodeLenses();
     }
   }
 
@@ -219,6 +218,9 @@ class CalculatorProvider
     const activeEditor = vscode.window.activeTextEditor;
     if (!activeEditor) return;
 
+    // 设置替换标志，防止触发新的弹框
+    this.isReplacing = true;
+
     const document = activeEditor.document;
     const position = activeEditor.selection.active;
     const line = document.lineAt(position.line);
@@ -226,7 +228,10 @@ class CalculatorProvider
 
     // 查找表达式在行中的位置
     const expressionStart = text.indexOf(expression);
-    if (expressionStart === -1) return;
+    if (expressionStart === -1) {
+      this.isReplacing = false;
+      return;
+    }
 
     const expressionEnd = expressionStart + expression.length;
 
@@ -251,6 +256,12 @@ class CalculatorProvider
     setTimeout(() => {
       this.statusBarItem.text = originalText;
     }, 2000);
+
+    // 延迟重置替换标志，确保替换操作完成
+    setTimeout(() => {
+      this.isReplacing = false;
+      console.log("替换操作完成，重置标志位");
+    }, 1000);
   }
 
   private findMathExpression(
@@ -442,6 +453,95 @@ class CalculatorProvider
 
   private clearCodeLenses() {
     this.codeLenses = [];
+  }
+
+  private showPathLikeTooltip(
+    expression: string,
+    result: number,
+    position: vscode.Position
+  ) {
+    // 创建一个类似路径提示框的装饰器
+    const activeEditor = vscode.window.activeTextEditor;
+    if (!activeEditor) return;
+
+    // 创建装饰器类型（已注释）
+    // const decorationType = vscode.window.createTextEditorDecorationType({
+    //   after: {
+    //     contentText: ` = ${result}`,
+    //     color: new vscode.ThemeColor("editorInfo.foreground"),
+    //     backgroundColor: new vscode.ThemeColor("editorInfo.background"),
+    //     border: `1px solid ${new vscode.ThemeColor("editorInfo.border")}`,
+    //     fontStyle: "italic",
+    //     fontWeight: "bold",
+    //   },
+    //   rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
+    // });
+
+    // 找到表达式在行中的位置
+    // const line = activeEditor.document.lineAt(position.line);
+    // const expressionStart = line.text.indexOf(expression);
+    // if (expressionStart === -1) return;
+
+    // const expressionEnd = expressionStart + expression.length;
+    // const range = new vscode.Range(
+    //   position.line,
+    //   expressionEnd,
+    //   position.line,
+    //   expressionEnd
+    // );
+
+    // 应用装饰器
+    // activeEditor.setDecorations(decorationType, [range]);
+
+    // 3秒后清除装饰器
+    // setTimeout(() => {
+    //   decorationType.dispose();
+    // }, 3000);
+
+    // 立即显示快速选择框
+    this.showQuickPickTooltip(expression, result);
+  }
+
+  private showQuickPickTooltip(expression: string, result: number) {
+    // 检查是否已经有快速选择框在显示，避免重复
+    if (this.currentQuickPick) {
+      this.currentQuickPick.hide();
+    }
+
+    // 创建一个快速选择框，类似路径提示框
+    const quickPick = vscode.window.createQuickPick();
+    this.currentQuickPick = quickPick;
+
+    quickPick.title = "计算结果";
+    quickPick.placeholder = "选择操作";
+    quickPick.items = [
+      {
+        label: `$(symbol-numeric) ${expression} = ${result}`,
+        description: "显示计算结果",
+        detail: "按回车键替换表达式",
+      },
+    ];
+
+    quickPick.onDidChangeSelection((selection) => {
+      if (selection.length > 0) {
+        // 点击选择项时只关闭弹框，不执行任何操作
+        quickPick.hide();
+        this.currentQuickPick = null;
+      }
+    });
+
+    quickPick.onDidAccept(() => {
+      // 按回车键默认替换表达式
+      this.replaceExpression(expression, result);
+      quickPick.hide();
+      this.currentQuickPick = null;
+    });
+
+    quickPick.onDidHide(() => {
+      this.currentQuickPick = null;
+    });
+
+    quickPick.show();
   }
 }
 
