@@ -114,3 +114,32 @@ vsce package
 2.5*3.7 → 9.25
 10/3 → 3.33
 ```
+
+## 文档目录
+
+项目文档已整理到 `doc/` 目录下，包含以下文档：
+
+### 核心文档
+- **CHANGELOG.md** - 版本更新日志
+- **FEATURES.md** - 功能特性详细说明
+- **DISABLED_FEATURES.md** - 已屏蔽功能说明
+
+### 安装指南
+- **INSTALL_GUIDE.md** - 通用安装指南
+- **CURSOR_INSTALL_GUIDE.md** - Cursor编辑器安装指南
+- **CURSOR_VSIX_INSTALL.md** - Cursor VSIX安装指南
+
+### 发布相关
+- **PUBLISH_GUIDE.md** - 发布指南
+- **QUICK_PUBLISH.md** - 快速发布指南
+- **RELEASE_INSTRUCTIONS.md** - 发布说明
+
+### 故障排除
+- **SEARCH_TROUBLESHOOTING.md** - 搜索问题排查
+- **CURSOR_CACHE_CLEAR.md** - Cursor缓存清理
+- **MANUAL_CURSOR_CLEAR.md** - 手动清理Cursor缓存
+
+### 其他文档
+- **CHECKLIST.md** - 开发检查清单
+- **QUICKSTART.md** - 快速开始指南
+- **SCREENSHOTS.md** - 截图说明
