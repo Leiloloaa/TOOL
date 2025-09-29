@@ -1,0 +1,306 @@
+/* 左侧菜单适配样式 */
+/* 为所有页面提供统一的左侧菜单适配 */
+
+/* 基础布局适配 */
+body {
+  margin-left: 180px !important; /* 为左侧菜单留出空间 */
+  transition: margin-left 0.3s ease;
+}
+
+/* 容器适配 */
+.container {
+  margin-left: 0 !important; /* 重置容器的左边距 */
+  max-width: none !important; /* 移除最大宽度限制 */
+  width: 100% !important;
+}
+
+/* 主内容区域适配 */
+.main-content {
+  margin-left: 0 !important;
+  max-width: none !important;
+  width: 100% !important;
+}
+
+/* 特定页面的适配 */
+
+/* handleImg 页面适配 */
+.handleImg-page .container,
+.handleReward-page .container,
+.watchFolder-page .container {
+  margin-left: 0 !important;
+  max-width: none !important;
+  width: 100% !important;
+  padding: 20px 10px !important;
+}
+
+.handleImg-page .main-content,
+.handleReward-page .main-content,
+.watchFolder-page .main-content {
+  margin-left: 0 !important;
+  max-width: none !important;
+  width: 100% !important;
+  border-radius: 20px !important;
+}
+
+/* activityUrl 页面适配 */
+.activityUrl-page .container {
+  margin-left: 0 !important;
+  max-width: none !important;
+  width: 100% !important;
+  padding: 20px 10px !important;
+}
+
+.activityUrl-page .main-content {
+  margin-left: 0 !important;
+  max-width: none !important;
+  width: 100% !important;
+  border-radius: 20px !important;
+}
+
+/* createActivity 页面适配 */
+.createActivity-page #app {
+  margin-left: 0 !important;
+  max-width: none !important;
+  width: 100% !important;
+}
+
+.createActivity-page .container {
+  margin-left: 0 !important;
+  max-width: none !important;
+  width: 100% !important;
+  padding: 20px 10px !important;
+}
+
+.createActivity-page .warp {
+  margin-left: 0 !important;
+  max-width: none !important;
+  width: 100% !important;
+  border-radius: 20px !important;
+}
+
+/* 确保createActivity页面的导航容器正确显示 */
+.createActivity-page #nav-container {
+  display: block !important;
+  min-height: auto !important;
+  margin-bottom: 0 !important;
+  /* 移除可能冲突的样式 */
+  padding: 0 !important;
+  overflow: visible !important;
+}
+
+/* 防止createActivity页面的样式覆盖左侧菜单 */
+.createActivity-page #nav-container .sidebar {
+  position: fixed !important;
+  left: 0 !important;
+  top: 0 !important;
+  width: 180px !important;
+  height: 100vh !important;
+  z-index: 1000 !important;
+}
+
+.createActivity-page #nav-container .nav-search-input {
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: white !important;
+  border: none !important;
+}
+
+.createActivity-page #nav-container .nav-search-input::placeholder {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.createActivity-page #nav-container .nav-search-input:focus {
+  background: rgba(255, 255, 255, 0.25) !important;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3) !important;
+}
+
+/* 测试页面适配 */
+.test-sidebar-page .container {
+  margin-left: 0 !important;
+  max-width: none !important;
+  width: 100% !important;
+  padding: 20px 40px !important;
+}
+
+.test-sidebar-page .main-content {
+  margin-left: 0 !important;
+  max-width: none !important;
+  width: 100% !important;
+  border-radius: 20px !important;
+}
+
+.test-search-page .container {
+  margin-left: 0 !important;
+  max-width: none !important;
+  width: 100% !important;
+  padding: 20px 40px !important;
+}
+
+.test-search-page .main-content {
+  margin-left: 0 !important;
+  max-width: none !important;
+  width: 100% !important;
+  border-radius: 20px !important;
+}
+
+.test-createActivity-page .container {
+  margin-left: 0 !important;
+  max-width: none !important;
+  width: 100% !important;
+  padding: 20px 10px !important;
+}
+
+.test-createActivity-page .main-content {
+  margin-left: 0 !important;
+  max-width: none !important;
+  width: 100% !important;
+  border-radius: 20px !important;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  body {
+    margin-left: 0 !important;
+  }
+
+  .sidebar {
+    position: relative !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  .container,
+  .main-content,
+  #app {
+    margin-left: 0 !important;
+    padding: 20px !important;
+  }
+
+  .warp {
+    margin-left: 0 !important;
+    padding: 30px !important;
+  }
+}
+
+/* 确保导航容器正确显示 */
+#navContainer {
+  display: block !important;
+  min-height: auto !important;
+  margin-bottom: 0 !important;
+}
+
+/* 页面标题和内容区域的间距调整 */
+.content-header {
+  margin-top: 20px !important;
+}
+
+/* 确保所有页面内容不被左侧菜单遮挡 */
+.warp,
+.main-content,
+.container > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* 加载遮罩层层级调整 */
+.loading-overlay {
+  z-index: 9999 !important;
+}
+
+/* Toast 通知层级调整 */
+.toast-container {
+  z-index: 10000 !important;
+}
+
+/* 页面特定优化 */
+
+/* 文件夹选择器优化 */
+.folder-selector {
+  margin-bottom: 30px !important;
+}
+
+/* 选项组优化 */
+.options {
+  margin-bottom: 30px !important;
+}
+
+/* 操作区域优化 */
+.action-area {
+  margin-bottom: 30px !important;
+}
+
+/* 信息卡片优化 */
+.info-section {
+  margin-bottom: 30px !important;
+}
+
+.info-card {
+  border-radius: 15px !important;
+  padding: 25px !important;
+}
+
+/* 进度区域优化 */
+.progress-area,
+.result-area,
+.status-area {
+  border-radius: 15px !important;
+  margin-top: 30px !important;
+}
+
+/* 表单元素优化 */
+.form-group {
+  margin-bottom: 20px !important;
+}
+
+/* 按钮样式优化 */
+.select-btn,
+.process-btn,
+.clear-log-btn,
+.copy-btn {
+  border-radius: 10px !important;
+  transition: all 0.3s ease !important;
+}
+
+/* 输入框优化 */
+.prefix-input {
+  border-radius: 8px !important;
+  transition: all 0.3s ease !important;
+}
+
+/* 日志内容区域优化 */
+.log-content,
+.preview-content {
+  border-radius: 10px !important;
+  max-height: 400px !important;
+  overflow-y: auto !important;
+}
+
+/* 状态指示器优化 */
+.status-indicator {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.status-dot {
+  width: 12px !important;
+  height: 12px !important;
+  border-radius: 50% !important;
+  background: #ccc !important;
+  animation: pulse 2s infinite !important;
+}
+
+.status-dot.active {
+  background: #52c41a !important;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}

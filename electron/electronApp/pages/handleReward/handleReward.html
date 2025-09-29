@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;"
+    />
+    <title>🛠️前端工具</title>
+    <link rel="stylesheet" href="./handleReward.css" />
+    <link rel="stylesheet" href="../shared/sidebar-adapter.css" />
+  </head>
+
+  <body class="handleReward-page">
+    <!-- Loading 遮罩层 -->
+    <div id="loadingOverlay" class="loading-overlay" style="display: none">
+      <div class="loading-content">
+        <div class="loading-spinner"></div>
+        <div class="loading-time" id="loadingTime">等待: 0秒</div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div id="navContainer"></div>
+
+      <div class="main-content">
+        <div class="content-header">
+          <h2>图片配置生成工具</h2>
+          <p>选择文件夹生成图片配置文件</p>
+        </div>
+
+        <div class="folder-selector">
+          <button id="selectFolderBtn" class="select-btn">
+            <span class="btn-icon">📁</span>
+            <span class="btn-text">选择文件夹</span>
+          </button>
+          <div id="selectedPath" class="selected-path"></div>
+        </div>
+
+        <div class="action-area">
+          <button id="processBtn" class="process-btn" disabled>
+            <span class="btn-icon">⚡</span>
+            <span class="btn-text">生成配置</span>
+          </button>
+        </div>
+
+        <div class="info-section">
+          <div class="info-card">
+            <h3>📋 功能说明</h3>
+            <ul>
+              <li>分析文件夹中的图片文件（PNG、JPG、JPEG、WEBP、GIF）</li>
+              <li>自动检测对应的MP4视频文件</li>
+              <li>生成图片配置对象数组</li>
+              <li>保存配置到 imageConfig.json 文件</li>
+              <li>自动复制配置到剪贴板</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="result-area" id="resultArea" style="display: none">
+          <div class="result-header">
+            <h3>生成结果</h3>
+            <button id="copyConfigBtn" class="copy-btn">复制配置</button>
+          </div>
+          <pre id="configPreview" class="preview-content"></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast 通知容器 -->
+    <div id="toastContainer" class="toast-container"></div>
+  </body>
+  <script src="./handleReward.js"></script>
+</html>

@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <title>🛠️搜索框样式冲突测试</title>
+    <link rel="stylesheet" href="./sidebar-adapter.css" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        color: #333;
+      }
+
+      .container {
+        padding: 20px;
+        min-height: 100vh;
+      }
+
+      .main-content {
+        background: white;
+        border-radius: 25px;
+        padding: 40px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      }
+
+      .content-header {
+        text-align: center;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #f0f0f0;
+      }
+
+      .content-header h2 {
+        font-size: 2rem;
+        color: #333;
+        margin-bottom: 10px;
+        font-weight: 700;
+      }
+
+      .content-header p {
+        font-size: 1.1rem;
+        color: #666;
+        font-weight: 400;
+      }
+
+      .test-section {
+        margin-bottom: 30px;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 15px;
+        border-left: 4px solid #667eea;
+      }
+
+      .test-section h3 {
+        color: #333;
+        margin-bottom: 15px;
+      }
+
+      .test-section p {
+        color: #666;
+        line-height: 1.6;
+        margin-bottom: 10px;
+      }
+
+      /* 模拟页面内搜索框样式 */
+      .page-search-container {
+        margin: 20px 0;
+        background: #f8f9fa;
+        border-radius: 15px;
+        border: 1px solid #e9ecef;
+        padding: 1rem;
+      }
+
+      .page-search-input-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        position: relative;
+        max-width: 600px;
+      }
+
+      .page-search-input {
+        flex: 1;
+        min-width: 300px;
+        height: 2.6rem;
+        padding: 0 1.2rem;
+        border: 2px solid #e0e7ef;
+        border-radius: 0.6rem;
+        font-size: 0.95rem;
+        font-family: inherit;
+        background: #fff;
+        color: #333;
+        transition: all 0.2s ease;
+        outline: none;
+      }
+
+      .page-search-input:focus {
+        border-color: #4facfe;
+        box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+      }
+
+      .page-search-btn {
+        width: 2.6rem;
+        height: 2.6rem;
+        border: none;
+        border-radius: 0.6rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+        font-size: 1.1rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 8px 0 rgba(102, 126, 234, 0.2);
+        flex-shrink: 0;
+      }
+
+      .page-search-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 16px 0 rgba(102, 126, 234, 0.3);
+      }
+
+      .status-indicator {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        background: #e8f5e8;
+        border-radius: 20px;
+        color: #52c41a;
+        font-weight: 500;
+      }
+
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #52c41a;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      .code-block {
+        background: #f1f3f4;
+        border-radius: 8px;
+        padding: 15px;
+        margin: 10px 0;
+        font-family: "Courier New", monospace;
+        font-size: 14px;
+        color: #333;
+        border-left: 4px solid #667eea;
+      }
+    </style>
+  </head>
+
+  <body class="test-search-page">
+    <div class="container">
+      <div id="navContainer"></div>
+
+      <div class="main-content">
+        <div class="content-header">
+          <h2>搜索框样式冲突测试</h2>
+          <p>验证左侧菜单搜索框与页面搜索框样式是否冲突</p>
+        </div>
+
+        <div class="test-section">
+          <h3>✅ 修复状态</h3>
+          <p><strong>问题：</strong>左侧菜单的搜索框与页面内的搜索框样式冲突</p>
+          <p><strong>解决方案：</strong>为左侧菜单搜索框添加特定的类名前缀</p>
+          <div class="status-indicator">
+            <span class="status-dot"></span>
+            <span>冲突已解决</span>
+          </div>
+        </div>
+
+        <div class="test-section">
+          <h3>🎨 样式隔离</h3>
+          <p><strong>左侧菜单搜索框：</strong></p>
+          <div class="code-block">
+            .nav-search-section { ... }<br />
+            .nav-search-container { ... }<br />
+            .nav-search-input { ... }<br />
+            .nav-search-icon { ... }
+          </div>
+
+          <p><strong>页面内搜索框：</strong></p>
+          <div class="code-block">
+            .search-container { ... }<br />
+            .search-input-wrapper { ... }<br />
+            .search-input { ... }<br />
+            .search-btn { ... }
+          </div>
+        </div>
+
+        <div class="test-section">
+          <h3>🧪 测试区域</h3>
+          <p>以下是模拟的页面内搜索框，应该与左侧菜单搜索框样式完全独立：</p>
+
+          <div class="page-search-container">
+            <div class="page-search-input-wrapper">
+              <input
+                type="text"
+                class="page-search-input"
+                placeholder="页面内搜索框测试..."
+              />
+              <button class="page-search-btn">🔍</button>
+            </div>
+          </div>
+
+          <p style="margin-top: 15px; color: #666; font-size: 14px">
+            ✅ 如果两个搜索框样式互不干扰，说明冲突已解决
+          </p>
+        </div>
+
+        <div class="test-section">
+          <h3>🔧 技术细节</h3>
+          <p><strong>类名隔离：</strong>左侧菜单使用 <code>nav-</code> 前缀</p>
+          <p>
+            <strong>ID隔离：</strong>左侧菜单搜索框ID为
+            <code>navSearchInput</code>
+          </p>
+          <p><strong>样式作用域：</strong>通过CSS选择器精确控制样式范围</p>
+          <p><strong>兼容性：</strong>保持所有原有功能不变</p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // 加载导航菜单
+      fetch("../shared/nav.html")
+        .then((response) => response.text())
+        .then((html) => {
+          document.getElementById("navContainer").innerHTML = html;
+        })
+        .catch((error) => {
+          console.error("加载导航菜单失败:", error);
+        });
+    </script>
+  </body>
+</html>

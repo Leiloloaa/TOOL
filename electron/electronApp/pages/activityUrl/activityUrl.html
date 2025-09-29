@@ -1,0 +1,755 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <title>🛠️前端工具</title>
+    <link rel="stylesheet" href="../shared/nav.css" />
+    <link rel="stylesheet" href="../shared/sidebar-adapter.css" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        color: #333;
+        overflow-x: hidden;
+      }
+
+      /* 隐藏滚动条但保持滚动功能 */
+      body::-webkit-scrollbar {
+        width: 0;
+        background: transparent;
+      }
+
+      body::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      body::-webkit-scrollbar-thumb {
+        background: transparent;
+      }
+
+      .container2 {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 0 10px 20px 10px !important;
+        min-height: 100vh;
+      }
+
+      #nav-container2 {
+        margin-bottom: 20px;
+      }
+
+      .main-content {
+        background: white;
+        border-radius: 25px;
+        padding: 40px;
+        padding-top: 10px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      }
+
+      .content-header {
+        text-align: center;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #f0f0f0;
+      }
+
+      .content-header h2 {
+        font-size: 2rem;
+        color: #333;
+        margin-bottom: 10px;
+        font-weight: 700;
+      }
+
+      .content-header p {
+        font-size: 1.1rem;
+        color: #666;
+        font-weight: 400;
+      }
+
+      h1 {
+        font-size: 2.2rem;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        margin: 1.2rem 0 0.5rem 0;
+        color: #22223b;
+        text-shadow: 0 2px 8px rgba(161, 140, 209, 0.08);
+      }
+
+      h2 {
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin: 0rem 0 0.2rem 0;
+        color: #4f4f6b;
+        letter-spacing: 0.02em;
+      }
+
+      h3 {
+        font-size: 1.15rem;
+        font-weight: 600;
+        color: #3a3a4d;
+        margin: 0rem 0 0.5rem 0;
+      }
+
+      #jenkins-buttons {
+        background: #f8f9fa;
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 30px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        font-weight: 600;
+        border: 1px solid #e9ecef;
+      }
+
+      #activity-links {
+        background: #f8f9fa;
+        border-radius: 15px;
+        padding: 16px;
+        margin-bottom: 24px;
+        max-height: 50vh;
+        min-height: 10vh;
+        overflow-y: auto;
+        scroll-behavior: smooth;
+        border: 1px solid #e9ecef;
+      }
+
+      #activity-links::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      #activity-links::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 3px;
+      }
+
+      #activity-links::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 3px;
+        transition: background 0.3s ease;
+      }
+
+      #activity-links::-webkit-scrollbar-thumb:hover {
+        background: rgba(0, 0, 0, 0.5);
+      }
+
+      #activity-links-general {
+        background: #f8f9fa;
+        border-radius: 15px;
+        padding: 16px;
+        margin-bottom: 24px;
+        max-height: 50vh;
+        min-height: 10vh;
+        overflow-y: auto;
+        scroll-behavior: smooth;
+        border: 1px solid #e9ecef;
+      }
+
+      #activity-links-general::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      #activity-links-general::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 3px;
+      }
+
+      #activity-links-general::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 3px;
+        transition: background 0.3s ease;
+      }
+
+      #activity-links-general::-webkit-scrollbar-thumb:hover {
+        background: rgba(0, 0, 0, 0.5);
+      }
+
+      .jenkins-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+        height: 3.5rem;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        border: none;
+        text-decoration: none;
+        padding: 0 1.5rem;
+        transition: all 0.3s ease;
+        font-weight: 600;
+      }
+
+      .jenkins-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+      }
+
+      .sub-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 0.4rem 0.8rem;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        margin: 0.1rem;
+        min-width: 50px;
+        text-align: center;
+      }
+
+      .sub-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+      }
+
+      .group-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 1.2rem 1.8rem;
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        margin: 0.3rem;
+        transition: all 0.3s ease;
+      }
+
+      .group-btn.active {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        transform: scale(1.05);
+        box-shadow: 0 8px 25px rgba(240, 147, 251, 0.3);
+      }
+
+      .group-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+      }
+
+      .group-menu {
+        display: flex;
+        /* justify-content: center; */
+        flex-wrap: wrap;
+        margin: 10px 0;
+        margin-top: -10px;
+        gap: 10px;
+      }
+
+      .activity-item {
+        background: white;
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 16px;
+        border: 1px solid #e9ecef;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        max-width: 100%;
+      }
+
+      .activity-item h3 {
+        margin-bottom: 12px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #f0f0f0;
+        font-size: 1.1rem;
+        line-height: 1.4;
+        display: flex;
+        align-items: center;
+      }
+
+      .activity-time {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+
+      .time-info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.9rem;
+      }
+
+      .time-info .time-label {
+        color: #333;
+        font-weight: 500;
+        white-space: nowrap;
+      }
+
+      .activity-links {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+
+      .link-info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.9rem;
+      }
+
+      .link-info .link-text {
+        color: #333;
+        font-weight: 500;
+        white-space: nowrap;
+      }
+
+      .link-buttons {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+        /* margin-top: 8px; */
+      }
+
+      .activity-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding-top: 12px;
+        border-top: 1px solid #f0f0f0;
+        flex-wrap: wrap;
+        margin-top: 8px;
+      }
+
+      .action-label {
+        color: #666;
+        font-size: 0.85rem;
+        margin-right: 4px;
+        white-space: nowrap;
+      }
+
+      .status-indicator {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        margin-right: 8px;
+      }
+
+      .status-active {
+        background-color: #28a745;
+      }
+
+      .status-inactive {
+        background-color: #dc3545;
+      }
+
+      /* 搜索功能样式 */
+      .search-container2 {
+        margin: 0 0 1.2rem 0;
+        background: #f8f9fa;
+        border-radius: 15px;
+        border: 1px solid #e9ecef;
+        padding: 1rem;
+        transition: all 0.3s ease;
+      }
+
+      .search-input-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        position: relative;
+        max-width: 600px;
+      }
+
+      .search-input {
+        flex: 1;
+        min-width: 300px;
+        height: 2.6rem;
+        padding: 0 1.2rem;
+        border: 2px solid #e0e7ef;
+        border-radius: 0.6rem;
+        font-size: 0.95rem;
+        font-family: inherit;
+        background: #fff;
+        color: #333;
+        transition: all 0.2s ease;
+        outline: none;
+      }
+
+      .search-input:focus {
+        border-color: #4facfe;
+        box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+      }
+
+      .search-btn {
+        width: 2.6rem;
+        height: 2.6rem;
+        border: none;
+        border-radius: 0.6rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+        font-size: 1.1rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 8px 0 rgba(102, 126, 234, 0.2);
+        flex-shrink: 0;
+      }
+
+      .search-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 16px 0 rgba(102, 126, 234, 0.3);
+      }
+
+      .clear-search-btn {
+        width: 2.6rem;
+        height: 2.6rem;
+        border: none;
+        border-radius: 0.6rem;
+        background: #f0f0f0;
+        color: #666;
+        font-size: 1.1rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        flex-shrink: 0;
+      }
+
+      .clear-search-btn:hover {
+        background: #e0e0e0;
+        color: #333;
+      }
+
+      .search-results {
+        margin-top: 1.2rem;
+        border-top: 1px solid #e0e7ef;
+        padding-top: 1.2rem;
+      }
+
+      .search-results-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+
+      .search-results-header h3 {
+        margin: 0;
+        color: #4f4f6b;
+        font-size: 1.2rem;
+      }
+
+      .close-search-btn {
+        padding: 0.4rem 1rem;
+        border: none;
+        border-radius: 0.4rem;
+        background: #f0f0f0;
+        color: #666;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .close-search-btn:hover {
+        background: #e0e0e0;
+        color: #333;
+      }
+
+      .search-results-content {
+        max-height: 40vh;
+        overflow-y: auto;
+        scroll-behavior: smooth;
+      }
+
+      .search-results-content::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .search-results-content::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 3px;
+      }
+
+      .search-results-content::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 3px;
+      }
+
+      .search-results-content::-webkit-scrollbar-thumb:hover {
+        background: #a8a8a8;
+      }
+
+      .search-result-item {
+        background: #fff;
+        border-radius: 0.8rem;
+        padding: 1rem;
+        margin-bottom: 0.8rem;
+        border-left: 4px solid #4facfe;
+        transition: all 0.2s ease;
+        border: 1px solid #e9ecef;
+      }
+
+      .search-result-item:hover {
+        background: #f8f9fa;
+        transform: translateX(4px);
+      }
+
+      .search-result-title {
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+      }
+
+      .search-result-info {
+        color: #666;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .search-result-actions {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+
+      .search-highlight {
+        background: #fff3cd;
+        color: #856404;
+        padding: 0.1rem 0.3rem;
+        border-radius: 0.2rem;
+        font-weight: 600;
+      }
+
+      /* 响应式设计 */
+      @media (max-width: 900px) {
+        .search-container2 {
+          margin: 0 0 1rem 0;
+          padding: 1rem;
+        }
+
+        .search-input-wrapper {
+          flex-direction: row;
+          gap: 0.6rem;
+        }
+
+        .search-input {
+          flex: 1;
+          min-width: 200px;
+        }
+
+        .search-btn,
+        .clear-search-btn {
+          width: 2.6rem;
+          height: 2.6rem;
+          flex-shrink: 0;
+        }
+
+        .search-results-header {
+          flex-direction: column;
+          gap: 0.5rem;
+          align-items: flex-start;
+        }
+
+        .activity-item {
+          padding: 12px;
+          margin-bottom: 12px;
+        }
+
+        .activity-item h3 {
+          font-size: 1rem;
+          margin-bottom: 10px;
+          padding-bottom: 6px;
+        }
+
+        .sub-btn {
+          padding: 0.3rem 0.6rem;
+          font-size: 0.8rem;
+          min-width: 45px;
+        }
+
+        .link-buttons,
+        .activity-actions {
+          gap: 6px;
+        }
+
+        .action-label {
+          font-size: 0.8rem;
+        }
+      }
+
+      /* 超小屏幕适配 */
+      @media (max-width: 480px) {
+        .search-input-wrapper {
+          flex-direction: row;
+          gap: 0.4rem;
+        }
+
+        .search-input {
+          flex: 1;
+          min-width: 150px;
+          font-size: 0.9rem;
+        }
+
+        .search-btn,
+        .clear-search-btn {
+          width: 2.4rem;
+          height: 2.4rem;
+          font-size: 1rem;
+        }
+
+        .activity-item {
+          padding: 10px;
+          margin-bottom: 10px;
+        }
+
+        .activity-item h3 {
+          font-size: 0.95rem;
+          margin-bottom: 8px;
+          padding-bottom: 5px;
+        }
+
+        .sub-btn {
+          padding: 0.25rem 0.5rem;
+          font-size: 0.75rem;
+          min-width: 40px;
+          margin: 0.05rem;
+        }
+
+        .link-buttons,
+        .activity-actions {
+          gap: 4px;
+        }
+
+        .action-label {
+          font-size: 0.75rem;
+          margin-right: 2px;
+        }
+
+        .time-info,
+        .link-info {
+          font-size: 0.85rem;
+          gap: 6px;
+        }
+
+        #activity-links,
+        #activity-links-general {
+          padding: 12px;
+          margin-bottom: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body class="activityUrl-page">
+    <div class="container2">
+      <!-- 导航菜单 -->
+      <div id="nav-container2"></div>
+
+      <div class="main-content">
+        <div class="content-header">
+          <h2>活动链接管理</h2>
+          <p>管理各活动链接、快速跳转相关Link</p>
+        </div>
+
+        <!-- 分组筛选按钮 -->
+        <div id="group-filter" class="group-menu">
+          <!-- 分组按钮由 JS 动态渲染 -->
+        </div>
+
+        <!-- 搜索功能区域 -->
+        <div id="search-container2" class="search-container2">
+          <div class="search-input-wrapper">
+            <input
+              type="text"
+              id="search-input"
+              class="search-input"
+              placeholder="搜索活动名称、活动链接、活动ID等..."
+            />
+            <button id="search-btn" class="search-btn">🔍</button>
+            <button
+              id="clear-search-btn"
+              class="clear-search-btn"
+              style="display: none"
+            >
+              ✕
+            </button>
+          </div>
+          <div id="search-results" class="search-results" style="display: none">
+            <div class="search-results-header">
+              <h3>搜索结果 <span id="search-count">(0)</span></h3>
+              <button id="close-search-results" class="close-search-btn">
+                关闭
+              </button>
+            </div>
+            <div id="search-results-content" class="search-results-content">
+              <!-- 搜索结果将在这里动态渲染 -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Jenkins 按钮区域 -->
+        <!-- <div id="jenkins-buttons">
+        </div> -->
+
+        <!-- 活动链接区域 -->
+        <h2
+          id="activity-links-h2"
+          style="display: flex; gap: 0.2rem; align-items: center"
+        >
+          常规活动<span id="activity-links-count"></span>
+          <span style="margin-left: 1rem; color: #f40; font-size: 17.6px">
+            当前时间：<span id="current-date"></span>
+          </span>
+          <span
+            id="activity-links-count-valid"
+            style="margin-left: 1rem; font-size: 16.6px"
+          ></span>
+        </h2>
+        <div id="activity-links"></div>
+
+        <h2 id="activity-links-general-h2">
+          常驻活动<span id="activity-links-general-count"></span>
+        </h2>
+        <div id="activity-links-general"></div>
+      </div>
+    </div>
+
+    <script>
+      // 加载导航菜单
+      async function loadNavigation() {
+        try {
+          const result = await window.electronAPI.loadNavigation("activityUrl");
+          if (result.success) {
+            // 注入CSS样式
+            const style = document.createElement("style");
+            style.textContent = result.css;
+            document.head.appendChild(style);
+
+            // 注入HTML内容
+            document.getElementById("nav-container2").innerHTML = result.html;
+          }
+        } catch (error) {
+          console.error("Failed to load navigation:", error);
+        }
+      }
+
+      // 页面加载完成后初始化导航
+      document.addEventListener("DOMContentLoaded", loadNavigation);
+    </script>
+    <script src="activityUrl.js"></script>
+    <script src="search.js"></script>
+  </body>
+</html>

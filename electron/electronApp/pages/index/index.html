@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🛠️前端工具</title>
+    <link rel="stylesheet" href="../shared/nav.css" />
+    <link rel="stylesheet" href="../shared/sidebar-adapter.css" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        color: #333;
+        overflow-x: hidden;
+      }
+
+      /* 隐藏滚动条但保持滚动功能 */
+      body::-webkit-scrollbar {
+        width: 0;
+        background: transparent;
+      }
+
+      body::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      body::-webkit-scrollbar-thumb {
+        background: transparent;
+      }
+
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 0 10px 20px 10px !important;
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      #nav-container {
+        margin-bottom: 20px;
+      }
+
+      .main-content {
+        background: white;
+        border-radius: 25px;
+        padding: 40px;
+        padding-top: 10px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        overflow-x: hidden;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 30px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #f0f0f0;
+      }
+
+      .header h1 {
+        font-size: 2rem;
+        color: #333;
+        margin-bottom: 10px;
+        font-weight: 700;
+      }
+
+      .header p {
+        font-size: 1.1rem;
+        color: #666;
+        font-weight: 400;
+      }
+
+      .features-section {
+        margin-bottom: 20px;
+      }
+
+      .features-section h2 {
+        font-size: 1.5rem;
+        color: #4f4f6b;
+        margin-bottom: 15px;
+        text-align: center;
+        font-weight: 700;
+      }
+
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+
+      .feature-card {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 10px;
+        padding: 15px;
+        border: 1px solid #e9ecef;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .feature-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+
+      .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      }
+
+      .feature-icon {
+        font-size: 2rem;
+        margin-bottom: 12px;
+        display: block;
+      }
+
+      .feature-card h3 {
+        font-size: 1.1rem;
+        color: #333;
+        margin-bottom: 10px;
+        font-weight: 600;
+      }
+
+      .feature-card p {
+        color: #666;
+        line-height: 1.5;
+        font-size: 0.9rem;
+      }
+
+      .links-section {
+        margin-top: 15px;
+        margin-bottom: 25px;
+      }
+
+      .links-section h2 {
+        font-size: 1.6rem;
+        color: #4f4f6b;
+        margin-bottom: 20px;
+        text-align: center;
+        font-weight: 700;
+      }
+
+      .links-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+      }
+
+      .link-card {
+        background: white;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        padding: 12px;
+        text-align: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .link-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(102, 126, 234, 0.1),
+          transparent
+        );
+        transition: left 0.5s ease;
+      }
+
+      .link-card:hover::before {
+        left: 100%;
+      }
+
+      .link-card:hover {
+        border-color: #667eea;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(102, 126, 234, 0.15);
+      }
+
+      .link-icon {
+        font-size: 1.3rem;
+        margin-bottom: 8px;
+        display: block;
+        color: #667eea;
+      }
+
+      .link-card h3 {
+        font-size: 0.9rem;
+        color: #333;
+        margin-bottom: 5px;
+        font-weight: 600;
+      }
+
+      .link-card p {
+        color: #666;
+        font-size: 0.75rem;
+        line-height: 1.2;
+      }
+
+      .loading {
+        text-align: center;
+        padding: 40px;
+        color: #666;
+        font-size: 1.1rem;
+      }
+
+      .error {
+        text-align: center;
+        padding: 40px;
+        color: #dc3545;
+        font-size: 1.1rem;
+      }
+
+      /* 响应式设计 */
+      @media (max-width: 768px) {
+        .container {
+          padding: 15px;
+        }
+
+        .main-content {
+          padding: 20px;
+        }
+
+        .header h1 {
+          font-size: 1.8rem;
+        }
+
+        .header p {
+          font-size: 1rem;
+        }
+
+        .features-grid {
+          grid-template-columns: 1fr;
+          gap: 15px;
+        }
+
+        .links-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 12px;
+        }
+
+        .feature-card,
+        .link-card {
+          padding: 15px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .container {
+          padding: 10px;
+        }
+
+        .main-content {
+          padding: 15px;
+        }
+
+        .header h1 {
+          font-size: 1.6rem;
+        }
+
+        .links-grid {
+          grid-template-columns: 1fr;
+          gap: 10px;
+        }
+
+        .feature-card,
+        .link-card {
+          padding: 12px;
+        }
+      }
+
+      /* 导航搜索相关样式 */
+      .nav-link.hidden {
+        opacity: 0 !important;
+        transform: translateX(-20px) !important;
+        pointer-events: none !important;
+        height: 0 !important;
+        padding: 0 20px !important;
+        margin: 0 16px !important;
+        overflow: hidden !important;
+        display: none !important;
+      }
+
+      .nav-search-clear {
+        position: absolute;
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 12px;
+        opacity: 0.8;
+        cursor: pointer;
+        padding: 2px;
+        border-radius: 3px;
+        transition: all 0.2s ease;
+        z-index: 10;
+      }
+
+      .nav-search-clear:hover {
+        opacity: 1;
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      /* 调整搜索图标位置，避免与清除按钮重叠 */
+      .nav-search-icon {
+        position: absolute;
+        right: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 14px;
+        opacity: 0.7;
+        pointer-events: none;
+      }
+
+      /* 当有清除按钮时，隐藏搜索图标 */
+      .nav-search-container:has(.nav-search-clear[style*="display: block"])
+        .nav-search-icon {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- 导航菜单 -->
+      <div id="nav-container"></div>
+
+      <div class="main-content">
+        <!-- 页面头部 -->
+        <div class="header">
+          <h1>活动开发工具集</h1>
+          <p>提供活动管理、链接跳转、文档查看等核心功能，提升开发效率。</p>
+        </div>
+
+        <!-- 链接区域 -->
+        <div class="links-section">
+          <div id="links-container" class="links-grid">
+            <div class="loading">正在加载链接...</div>
+          </div>
+        </div>
+
+        <!-- 功能介绍区域 -->
+        <div class="features-section">
+          <h2>✨ 核心功能</h2>
+          <div class="features-grid">
+            <div class="feature-card">
+              <span class="feature-icon">📊</span>
+              <h3>活动链接管理</h3>
+              <p>
+                统一管理所有活动链接，支持多环境切换、快速跳转，实时查看活动状态和排期信息。
+              </p>
+            </div>
+            <div class="feature-card">
+              <span class="feature-icon">🎯</span>
+              <h3>智能搜索</h3>
+              <p>
+                强大的搜索功能，支持按活动名称、ID、链接等关键词快速定位，提高查找效率。
+              </p>
+            </div>
+            <div class="feature-card">
+              <span class="feature-icon">📝</span>
+              <h3>文档中心</h3>
+              <p>
+                集中管理需求文档、设计稿、文案等资源，一键跳转到相关文档，保持信息同步。
+              </p>
+            </div>
+            <div class="feature-card">
+              <span class="feature-icon">⚡</span>
+              <h3>快速创建</h3>
+              <p>
+                自动化活动创建流程，支持Git分支管理、文件生成，大幅提升开发效率。
+              </p>
+            </div>
+            <div class="feature-card">
+              <span class="feature-icon">🔧</span>
+              <h3>开发工具</h3>
+              <p>
+                集成Jenkins构建、OSS管理、环境切换等开发必备工具，一站式解决开发需求。
+              </p>
+            </div>
+            <div class="feature-card">
+              <span class="feature-icon">📈</span>
+              <h3>项目管理</h3>
+              <p>
+                支持多项目管理，包括Yoho、Hiyoo、SoulStar等，统一的工作流程和标准。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // 导航搜索功能
+      let searchTimeout;
+
+      function performSearch(searchTerm) {
+        const links = Array.from(document.querySelectorAll(".nav-link"));
+        const noResults = document.querySelector(".no-results");
+        let visibleCount = 0;
+
+        links.forEach((link, index) => {
+          const keywords = link.getAttribute("data-keywords") || "";
+          const text = link.querySelector(".nav-text").textContent;
+          const desc = link.querySelector(".nav-desc").textContent;
+
+          const searchText = `${keywords} ${text} ${desc}`.toLowerCase();
+          const isMatch =
+            searchTerm === "" || searchText.includes(searchTerm.toLowerCase());
+
+          if (isMatch) {
+            link.classList.remove("hidden");
+            visibleCount++;
+          } else {
+            link.classList.add("hidden");
+          }
+        });
+
+        // 显示/隐藏无结果提示
+        if (visibleCount === 0 && searchTerm !== "") {
+          if (noResults) {
+            noResults.style.display = "block";
+          }
+        } else {
+          if (noResults) {
+            noResults.style.display = "none";
+          }
+        }
+
+        // 更新搜索框的视觉反馈
+        const searchInput = document.getElementById("navSearchInput");
+        const clearBtn = document.getElementById("navSearchClear");
+        const searchIcon = document.querySelector(".nav-search-icon");
+
+        if (searchInput) {
+          if (searchTerm !== "") {
+            searchInput.style.background =
+              visibleCount > 0
+                ? "rgba(255, 255, 255, 0.25)"
+                : "rgba(255, 255, 255, 0.15)";
+          } else {
+            searchInput.style.background = "rgba(255, 255, 255, 0.15)";
+          }
+        }
+
+        // 显示/隐藏清除按钮和搜索图标
+        if (clearBtn) {
+          clearBtn.style.display = searchTerm !== "" ? "block" : "none";
+        }
+
+        if (searchIcon) {
+          searchIcon.style.display = searchTerm !== "" ? "none" : "block";
+        }
+      }
+
+      function initSearch() {
+        const searchInput = document.getElementById("navSearchInput");
+        if (!searchInput) {
+          console.warn("未找到导航搜索输入框");
+          return;
+        }
+
+        console.log("初始化导航搜索功能");
+
+        searchInput.addEventListener("input", function () {
+          clearTimeout(searchTimeout);
+          const searchTerm = this.value.trim();
+
+          searchTimeout = setTimeout(() => {
+            performSearch(searchTerm);
+          }, 300);
+        });
+
+        // 清空搜索时恢复所有菜单项
+        searchInput.addEventListener("keydown", function (e) {
+          if (e.key === "Escape") {
+            this.value = "";
+            performSearch("");
+            this.blur();
+          }
+        });
+
+        // 添加焦点事件
+        searchInput.addEventListener("focus", function () {
+          this.placeholder = "输入关键词搜索...";
+        });
+
+        searchInput.addEventListener("blur", function () {
+          this.placeholder = "搜索...";
+        });
+
+        // 清除搜索按钮
+        const clearBtn = document.getElementById("navSearchClear");
+        if (clearBtn) {
+          clearBtn.addEventListener("click", function () {
+            searchInput.value = "";
+            performSearch("");
+            searchInput.focus();
+          });
+        }
+
+        // 初始搜索（清空状态）
+        performSearch("");
+      }
+
+      // 加载导航菜单
+      async function loadNavigation() {
+        try {
+          const result = await window.electronAPI.loadNavigation("index");
+          if (result.success) {
+            // 注入CSS样式
+            const style = document.createElement("style");
+            style.textContent = result.css;
+            document.head.appendChild(style);
+
+            // 注入HTML内容
+            document.getElementById("nav-container").innerHTML = result.html;
+
+            // 导航加载完成后初始化搜索功能
+            setTimeout(() => {
+              initSearch();
+            }, 100);
+          }
+        } catch (error) {
+          console.error("Failed to load navigation:", error);
+        }
+      }
+
+      // 获取链接图标
+      function getLinkIcon(label) {
+        const iconMap = {
+          飞书统一登录: "🔐",
+          活动排期表: "📅",
+          yoho八月需求文档: "📋",
+          hiyoo八月需求文档: "📋",
+          yoho月计划安排表: "📊",
+          hiyoo月计划安排表: "📊",
+          soulStar活动排期表: "⭐",
+          dreamBit活动排期表: "💎",
+          设计月计划: "🎨",
+          前后端模块: "🔧",
+          前端固定文案: "📝",
+        };
+
+        return iconMap[label] || "🔗";
+      }
+
+      // 渲染链接
+      function renderLinks(links) {
+        const container = document.getElementById("links-container");
+
+        if (!links || links.length === 0) {
+          container.innerHTML = '<div class="error">暂无链接数据</div>';
+          return;
+        }
+
+        const linksHTML = links
+          .map(
+            (link) => `
+        <div class="link-card" onclick="openLink('${link.url}')">
+          <span class="link-icon">${getLinkIcon(link.label)}</span>
+          <h3>${link.label}</h3>
+          <p>点击跳转到相关页面</p>
+        </div>
+      `
+          )
+          .join("");
+
+        container.innerHTML = linksHTML;
+      }
+
+      // 打开链接
+      function openLink(url) {
+        if (url) {
+          window.open(url, "_blank");
+        }
+      }
+
+      // 加载配置
+      async function loadConfig() {
+        try {
+          const response = await fetch("./config.json");
+          if (!response.ok) {
+            throw new Error("Failed to load config");
+          }
+
+          const config = await response.json();
+          if (config.links && Array.isArray(config.links)) {
+            renderLinks(config.links);
+          } else {
+            document.getElementById("links-container").innerHTML =
+              '<div class="error">配置格式错误</div>';
+          }
+        } catch (error) {
+          console.error("Error loading config:", error);
+          document.getElementById("links-container").innerHTML =
+            '<div class="error">加载配置失败: ' + error.message + "</div>";
+        }
+      }
+
+      // 全局测试函数
+      window.testNavSearch = function (term) {
+        console.log("手动测试搜索:", term);
+        performSearch(term);
+      };
+
+      // 页面加载完成后初始化
+      document.addEventListener("DOMContentLoaded", () => {
+        loadNavigation();
+        loadConfig();
+      });
+    </script>
+  </body>
+</html>

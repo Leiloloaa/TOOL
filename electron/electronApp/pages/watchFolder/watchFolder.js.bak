@@ -1,0 +1,338 @@
+// DOM 元素
+const selectFolderBtn = document.getElementById("selectFolderBtn");
+const selectedPathDiv = document.getElementById("selectedPath");
+const startWatchBtn = document.getElementById("startWatchBtn");
+const stopWatchBtn = document.getElementById("stopWatchBtn");
+const progressArea = document.getElementById("progressArea");
+const logContent = document.getElementById("logContent");
+const clearLogBtn = document.getElementById("clearLogBtn");
+const navContainer = document.getElementById("navContainer");
+const toastContainer = document.getElementById("toastContainer");
+const loadingOverlay = document.getElementById("loadingOverlay");
+const loadingTime = document.getElementById("loadingTime");
+const customPrefixGroup = document.getElementById("customPrefixGroup");
+const customPrefix = document.getElementById("customPrefix");
+const statusArea = document.getElementById("statusArea");
+const statusDot = document.getElementById("statusDot");
+const statusText = document.getElementById("statusText");
+
+// 状态变量
+let selectedFolderPath = null;
+let isWatching = false;
+let startTime = null;
+let timeInterval = null;
+
+// 初始化
+document.addEventListener("DOMContentLoaded", async () => {
+  await loadNavigation();
+  setupEventListeners();
+  setupWatchListeners();
+});
+
+// 加载导航组件
+async function loadNavigation() {
+  try {
+    const result = await window.electronAPI.loadNavigation("watchFolder");
+    if (result.success) {
+      // 注入CSS样式
+      const style = document.createElement("style");
+      style.textContent = result.css;
+      document.head.appendChild(style);
+
+      // 注入HTML内容
+      navContainer.innerHTML = result.html;
+    }
+  } catch (error) {
+    console.error("Failed to load navigation:", error);
+  }
+}
+
+// 显示 Loading
+function showLoading() {
+  loadingOverlay.style.display = "flex";
+  startTime = Date.now();
+  loadingTime.textContent = "等待: 0秒";
+
+  // 开始计时
+  timeInterval = setInterval(() => {
+    const elapsed = Math.floor((Date.now() - startTime) / 1000);
+    loadingTime.textContent = `等待: ${elapsed}秒`;
+  }, 1000);
+}
+
+// 隐藏 Loading
+function hideLoading() {
+  loadingOverlay.style.display = "none";
+
+  // 停止计时
+  if (timeInterval) {
+    clearInterval(timeInterval);
+    timeInterval = null;
+  }
+
+  // 显示最终耗时
+  if (startTime) {
+    const totalTime = Math.floor((Date.now() - startTime) / 1000);
+    console.log(`处理完成，总耗时: ${totalTime}秒`);
+    startTime = null;
+  }
+}
+
+// 显示 Toast 通知
+function showToast(message, type = "info") {
+  const toast = document.createElement("div");
+  toast.className = `toast ${type}`;
+
+  const icons = {
+    success: "✅",
+    error: "❌",
+    info: "ℹ️",
+  };
+
+  toast.innerHTML = `
+    <div class="toast-content">
+      <span class="toast-icon">${icons[type] || icons.info}</span>
+      <span class="toast-message">${message}</span>
+    </div>
+  `;
+
+  toastContainer.appendChild(toast);
+
+  // 触发动画
+  setTimeout(() => {
+    toast.classList.add("show");
+  }, 10);
+
+  // 自动移除
+  setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(() => {
+      if (toast.parentNode) {
+        toast.parentNode.removeChild(toast);
+      }
+    }, 300);
+  }, 3000);
+}
+
+// 更新监听状态
+function updateWatchStatus(watching) {
+  isWatching = watching;
+  
+  if (watching) {
+    statusDot.className = "status-dot watching";
+    statusText.textContent = "正在监听文件夹变化...";
+    statusText.style.color = "#28a745";
+  } else {
+    statusDot.className = "status-dot stopped";
+    statusText.textContent = "监听已停止";
+    statusText.style.color = "#dc3545";
+  }
+}
+
+// 设置事件监听器
+function setupEventListeners() {
+  // 选择文件夹按钮
+  selectFolderBtn.addEventListener("click", async () => {
+    if (isWatching) return;
+
+    // 重置相关状态
+    progressArea.style.display = "none";
+    logContent.innerHTML = "";
+    statusArea.style.display = "none";
+
+    try {
+      const result = await window.electronAPI.selectFolder();
+      if (result.canceled) {
+        addLog("用户取消了文件夹选择", "info");
+        return;
+      }
+
+      selectedFolderPath = result.filePath;
+      selectedPathDiv.textContent = selectedFolderPath;
+      selectedPathDiv.classList.add("has-path");
+      startWatchBtn.disabled = false;
+
+      addLog(`已选择监听文件夹: ${selectedFolderPath}`, "success");
+    } catch (error) {
+      addLog(`选择文件夹失败: ${error.message}`, "error");
+    }
+  });
+
+  // 开始监听按钮
+  startWatchBtn.addEventListener("click", async () => {
+    if (!selectedFolderPath || isWatching) return;
+
+    const selectedMode = document.querySelector(
+      'input[name="namingMode"]:checked'
+    );
+
+    if (!selectedMode) {
+      showToast("请选择命名模式", "error");
+      return;
+    }
+
+    const namingMode = selectedMode.value;
+
+    // 检查自定义前缀
+    if (namingMode === "custom") {
+      const prefix = customPrefix.value.trim();
+      if (!prefix) {
+        showToast("请输入自定义前缀", "error");
+        customPrefix.focus();
+        return;
+      }
+    }
+
+    try {
+      // 显示状态区域和进度区域
+      statusArea.style.display = "block";
+      progressArea.style.display = "block";
+
+      // 重置进度
+      addLog("开始监听文件夹变化...", "info");
+
+      // 显示 Loading
+      showLoading();
+
+      // 调用主进程开始监听
+      const watchMode = namingMode === "custom" ? `custom:${customPrefix.value.trim()}` : namingMode;
+      await window.electronAPI.startWatchFolder(selectedFolderPath, watchMode);
+
+      // 更新UI状态
+      updateWatchStatus(true);
+      startWatchBtn.style.display = "none";
+      stopWatchBtn.style.display = "inline-flex";
+      selectFolderBtn.disabled = true;
+
+      addLog("文件夹监听已启动", "success");
+      showToast("文件夹监听已启动", "success");
+
+    } catch (error) {
+      addLog(`启动监听失败: ${error.message}`, "error");
+      showToast("启动监听失败，请查看日志", "error");
+    } finally {
+      // 隐藏 Loading
+      hideLoading();
+    }
+  });
+
+  // 停止监听按钮
+  stopWatchBtn.addEventListener("click", async () => {
+    if (!isWatching) return;
+
+    try {
+      // 调用主进程停止监听
+      await window.electronAPI.stopWatchFolder();
+
+      // 更新UI状态
+      updateWatchStatus(false);
+      startWatchBtn.style.display = "inline-flex";
+      stopWatchBtn.style.display = "none";
+      selectFolderBtn.disabled = false;
+
+      addLog("文件夹监听已停止", "info");
+      showToast("文件夹监听已停止", "info");
+
+    } catch (error) {
+      addLog(`停止监听失败: ${error.message}`, "error");
+      showToast("停止监听失败，请查看日志", "error");
+    }
+  });
+
+  // 清空日志按钮
+  clearLogBtn.addEventListener("click", () => {
+    logContent.innerHTML = "";
+  });
+
+  // 命名模式单选按钮事件
+  const namingModeRadios = document.querySelectorAll(
+    'input[name="namingMode"]'
+  );
+  namingModeRadios.forEach((radio) => {
+    radio.addEventListener("change", () => {
+      if (radio.value === "custom") {
+        customPrefixGroup.style.display = "block";
+        customPrefix.focus();
+      } else {
+        customPrefixGroup.style.display = "none";
+        customPrefix.value = "";
+      }
+    });
+  });
+}
+
+// 设置监听器
+function setupWatchListeners() {
+  // 监听文件变化
+  window.electronAPI.onFileChange((event, data) => {
+    addLog(`检测到文件变化: ${data.fileName}`, "info");
+  });
+
+  // 监听图片处理开始
+  window.electronAPI.onImageProcessStart((event, data) => {
+    addLog(`开始处理图片: ${data.fileName}`, "info");
+  });
+
+  // 监听图片处理完成
+  window.electronAPI.onImageProcessComplete((event, data) => {
+    addLog(`图片处理完成: ${data.fileName}`, "success");
+    showToast(`图片 ${data.fileName} 压缩完成`, "success");
+  });
+
+  // 监听图片处理错误
+  window.electronAPI.onImageProcessError((event, data) => {
+    addLog(`图片处理失败: ${data.fileName} - ${data.error}`, "error");
+    showToast(`图片 ${data.fileName} 处理失败`, "error");
+  });
+
+  // 监听监听器错误
+  window.electronAPI.onWatchError((event, data) => {
+    addLog(`监听错误: ${data.error}`, "error");
+    showToast("文件夹监听出现错误", "error");
+    
+    // 自动停止监听
+    updateWatchStatus(false);
+    startWatchBtn.style.display = "inline-flex";
+    stopWatchBtn.style.display = "none";
+    selectFolderBtn.disabled = false;
+  });
+
+  // 监听监听器停止
+  window.electronAPI.onWatchStop((event, data) => {
+    addLog("文件夹监听已停止", "info");
+    updateWatchStatus(false);
+    startWatchBtn.style.display = "inline-flex";
+    stopWatchBtn.style.display = "none";
+    selectFolderBtn.disabled = false;
+  });
+}
+
+// 添加日志
+function addLog(message, type = "info") {
+  const logItem = document.createElement("div");
+  logItem.className = `log-item ${type}`;
+
+  const timestamp = new Date().toLocaleTimeString();
+  logItem.textContent = `[${timestamp}] ${message}`;
+
+  logContent.appendChild(logItem);
+  
+  // 自动滚动到底部
+  logContent.scrollTop = logContent.scrollHeight;
+}
+
+// 页面卸载时清理监听器
+window.addEventListener("beforeunload", () => {
+  // 停止监听
+  if (isWatching) {
+    window.electronAPI.stopWatchFolder();
+  }
+  
+  // 移除所有监听器
+  window.electronAPI.removeAllListeners("file-change");
+  window.electronAPI.removeAllListeners("image-process-start");
+  window.electronAPI.removeAllListeners("image-process-complete");
+  window.electronAPI.removeAllListeners("image-process-error");
+  window.electronAPI.removeAllListeners("watch-error");
+  window.electronAPI.removeAllListeners("watch-stop");
+});

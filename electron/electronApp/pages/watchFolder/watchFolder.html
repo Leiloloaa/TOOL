@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;"
+    />
+    <title>🛠️前端工具</title>
+    <link rel="stylesheet" href="./watchFolder.css" />
+    <link rel="stylesheet" href="../shared/sidebar-adapter.css" />
+  </head>
+
+  <body class="watchFolder-page">
+    <!-- Loading 遮罩层 -->
+    <div id="loadingOverlay" class="loading-overlay" style="display: none">
+      <div class="loading-content">
+        <div class="loading-spinner"></div>
+        <div class="loading-time" id="loadingTime">等待: 0秒</div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div id="navContainer"></div>
+
+      <div class="main-content">
+        <div class="content-header">
+          <h2>文件夹监听工具</h2>
+          <p>监听指定文件夹，自动压缩新增的图片文件</p>
+        </div>
+
+        <div class="folder-selector">
+          <button id="selectFolderBtn" class="select-btn">
+            <span class="btn-icon">📁</span>
+            <span class="btn-text">选择监听文件夹</span>
+          </button>
+          <div id="selectedPath" class="selected-path"></div>
+        </div>
+
+        <div class="options">
+          <div class="option-group">
+            <label class="option-label">命名模式：</label>
+            <div class="radio-group">
+              <label class="radio-item">
+                <input type="radio" name="namingMode" value="a" checked />
+                <span>保持原文件名</span>
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="namingMode" value="custom" />
+                <span>自定义前缀</span>
+              </label>
+            </div>
+            <div
+              class="custom-prefix-group"
+              id="customPrefixGroup"
+              style="display: none"
+            >
+              <label class="prefix-label">前缀：</label>
+              <input
+                type="text"
+                id="customPrefix"
+                class="prefix-input"
+                placeholder="请输入前缀，如：image_"
+              />
+            </div>
+          </div>
+          <div class="option-group">
+            <label class="option-label">扁平化目录：</label>
+            <label class="radio-item">
+              <input type="checkbox" id="flattenToggle" />
+              <span>启用（默认关闭）</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="action-area">
+          <button id="startWatchBtn" class="process-btn" disabled>
+            <span class="btn-icon">👁️</span>
+            <span class="btn-text">开始监听</span>
+          </button>
+          <button
+            id="stopWatchBtn"
+            class="process-btn stop-btn"
+            style="display: none"
+          >
+            <span class="btn-icon">⏹️</span>
+            <span class="btn-text">停止监听</span>
+          </button>
+        </div>
+
+        <div class="info-section">
+          <div class="info-card">
+            <h3>📋 功能说明</h3>
+            <ul>
+              <li>监听指定文件夹的文件变化</li>
+              <li>自动检测新增的图片文件（PNG、JPG、JPEG）</li>
+              <li>实时压缩新增的图片文件</li>
+              <li>支持两种命名模式：保持原文件名或使用自定义前缀</li>
+              <li>显示监听状态和处理日志</li>
+              <li>支持停止和重新开始监听</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="status-area" id="statusArea" style="display: none">
+          <div class="status-header">
+            <h3>监听状态</h3>
+            <div class="status-indicator">
+              <span class="status-dot" id="statusDot"></span>
+              <span class="status-text" id="statusText">未开始监听</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="progress-area" id="progressArea" style="display: none">
+          <div class="progress-header">
+            <h3>处理日志</h3>
+            <button id="clearLogBtn" class="clear-log-btn">清空</button>
+          </div>
+          <div id="logContent" class="log-content"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast 通知容器 -->
+    <div id="toastContainer" class="toast-container"></div>
+  </body>
+  <script src="./watchFolder.js"></script>
+</html>

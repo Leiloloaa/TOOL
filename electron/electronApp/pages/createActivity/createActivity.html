@@ -1,0 +1,1135 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🛠️前端工具</title>
+    <link
+      href="https://cn.vitejs.dev/logo-with-shadow.png"
+      rel="shortcut icon"
+      type="image/x-icon"
+    />
+    <link rel="stylesheet" href="../shared/sidebar-adapter.css" />
+    <!-- 导入库 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.45/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/dayjs/dayjs.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+    <style>
+      body {
+        margin: 0;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        min-height: 100vh;
+        color: #333;
+        overflow-x: hidden;
+      }
+
+      /* 隐藏滚动条但保持滚动功能 */
+      body::-webkit-scrollbar {
+        width: 0;
+        background: transparent;
+      }
+
+      body::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      body::-webkit-scrollbar-thumb {
+        background: transparent;
+      }
+
+      #app {
+        max-width: 1000px;
+        margin: 0 auto;
+        min-height: 100vh;
+      }
+
+      .container {
+        margin: 0 auto;
+        padding: 20px;
+        min-height: 100vh;
+      }
+
+      .warp {
+        margin: 0 auto;
+        padding: 40px;
+        background: white;
+        border-radius: 25px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      }
+
+      .content-header {
+        text-align: center;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #f0f0f0;
+      }
+
+      .content-header h2 {
+        font-size: 2rem;
+        color: #333;
+        margin-bottom: 10px;
+        font-weight: 700;
+      }
+
+      .content-header p {
+        font-size: 1.1rem;
+        color: #666;
+        font-weight: 400;
+      }
+
+      #nav-container {
+        min-height: 100px;
+        margin-bottom: 20px;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .form-label {
+        min-width: 150px;
+        font-weight: 500;
+        color: #333;
+        flex-shrink: 0;
+      }
+
+      .form-input {
+        flex: 1;
+        padding: 10px 12px;
+        border: 1px solid #dcdfe6;
+        border-radius: 4px;
+        font-size: 14px;
+        transition: border-color 0.2s;
+        box-sizing: border-box;
+      }
+
+      .form-input:focus {
+        outline: none;
+        border-color: #409eff;
+      }
+
+      .radio-group {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        flex: 1;
+      }
+
+      .radio-button {
+        padding: 8px 16px;
+        border: 1px solid #dcdfe6;
+        background: white;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 14px;
+        flex-shrink: 0;
+      }
+
+      .radio-button:hover {
+        border-color: #409eff;
+        color: #409eff;
+      }
+
+      .radio-button.active {
+        background: #409eff;
+        border-color: #409eff;
+        color: white;
+      }
+
+      .button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: all 0.2s;
+        margin-right: 10px;
+        margin-bottom: 10px;
+      }
+
+      .button-primary {
+        background: #409eff;
+        color: white;
+      }
+
+      .button-primary:hover {
+        background: #337ecc;
+      }
+
+      .button-success {
+        background: #67c23a;
+        color: white;
+      }
+
+      .button-success:hover {
+        background: #529b2e;
+      }
+
+      .button-warning {
+        background: #e6a23c;
+        color: white;
+      }
+
+      .button-warning:hover {
+        background: #cf9236;
+      }
+
+      .button:disabled {
+        background: #c0c4cc;
+        cursor: not-allowed;
+      }
+
+      .action-buttons {
+        margin-top: 30px;
+        display: flex;
+        gap: 15px;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        padding-left: 165px; /* 与label宽度对齐 */
+      }
+
+      .message {
+        padding: 10px 15px;
+        border-radius: 4px;
+        margin: 10px 0;
+        font-size: 14px;
+      }
+
+      .message-success {
+        background: #f0f9ff;
+        border: 1px solid #b3d8ff;
+        color: #409eff;
+      }
+
+      .message-error {
+        background: #fef0f0;
+        border: 1px solid #fbc4c4;
+        color: #f56c6c;
+      }
+
+      .message-warning {
+        background: #fdf6ec;
+        border: 1px solid #f5dab1;
+        color: #e6a23c;
+      }
+
+      .loading {
+        opacity: 0.6;
+        pointer-events: none;
+      }
+
+      /* Toast 通知样式 */
+      .toast-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+        pointer-events: none;
+      }
+
+      .toast {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        padding: 12px 16px;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+        pointer-events: auto;
+        max-width: 300px;
+      }
+
+      .toast.show {
+        transform: translateX(0);
+      }
+
+      .toast.success {
+        border-left: 4px solid #52c41a;
+      }
+
+      .toast.error {
+        border-left: 4px solid #ff4d4f;
+      }
+
+      .toast.info {
+        border-left: 4px solid #1890ff;
+      }
+
+      .toast-icon {
+        font-size: 16px;
+      }
+
+      .toast-message {
+        font-size: 14px;
+        color: #333;
+      }
+
+      .toast-content {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+      }
+
+      /* 响应式设计 */
+      @media (max-width: 768px) {
+        body {
+          padding: 10px;
+        }
+
+        .warp {
+          padding: 30px;
+        }
+
+        .title {
+          font-size: 24px;
+          height: 60px;
+          line-height: 60px;
+        }
+
+        .form-group {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 8px;
+        }
+
+        .form-label {
+          min-width: auto;
+          margin-bottom: 4px;
+        }
+
+        .form-input {
+          width: 100%;
+        }
+
+        .radio-group {
+          width: 100%;
+        }
+
+        .action-buttons {
+          flex-direction: column;
+          align-items: center;
+          padding-left: 0;
+        }
+      }
+
+      /* Loading 遮罩层样式 */
+      .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+      }
+
+      .loading-content {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        min-width: 200px;
+      }
+
+      .loading-spinner {
+        width: 24px;
+        height: 24px;
+        border: 2px solid #f3f3f3;
+        border-top: 2px solid #1890ff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 12px;
+      }
+
+      .loading-text {
+        font-size: 14px;
+        color: #333;
+        font-weight: 500;
+        margin-bottom: 4px;
+      }
+
+      .loading-time {
+        font-size: 12px;
+        color: #666;
+        margin-top: 4px;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* 移除冲突的导航栏样式，让左侧菜单适配CSS处理 */
+      #nav-container {
+        /* 确保导航容器正确显示 */
+        display: block !important;
+        min-height: auto !important;
+        margin-bottom: 0 !important;
+      }
+    </style>
+  </head>
+  <body class="createActivity-page">
+    <!-- Loading 遮罩层 -->
+    <div id="loadingOverlay" class="loading-overlay" style="display: none">
+      <div class="loading-content">
+        <div class="loading-spinner"></div>
+        <div class="loading-time" id="loadingTime">loading...</div>
+      </div>
+    </div>
+
+    <div id="app">
+      <div class="container">
+        <!-- 导航菜单 -->
+        <div id="nav-container"></div>
+
+        <div class="warp" :class="{ loading: form.fullscreenLoading }">
+          <div class="content-header">
+            <h2 style="margin-top: 0">活动创建工具</h2>
+            <!-- <p>创建活动、上传文案、管理配置</p> -->
+          </div>
+
+          <!-- 消息提示 -->
+          <div v-if="message" :class="['message', `message-${message.type}`]">
+            {{ message.text }}
+          </div>
+
+          <!-- Toast 通知容器 -->
+          <div id="toastContainer" class="toast-container"></div>
+
+          <form @submit.prevent="onSubmit">
+            <div class="form-group">
+              <label class="form-label">Project Name</label>
+              <div class="radio-group">
+                <div
+                  v-for="project in ['Yoho', 'Hiyoo', 'SoulStar']"
+                  :key="project"
+                  :class="['radio-button', { active: form.projectName === project }]"
+                  @click="form.projectName = project"
+                >
+                  {{ project }}
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">General activity</label>
+              <div class="radio-group">
+                <div
+                  v-for="option in ['true', 'false']"
+                  :key="option"
+                  :class="['radio-button', { active: form.isGeneral === option }]"
+                  @click="form.isGeneral = option"
+                >
+                  {{ option }}
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Activity catalog</label>
+              <input v-model="form.catalog" class="form-input" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Activity Name</label>
+              <input v-model="form.name" class="form-input" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Activity id</label>
+              <input v-model="form.id" class="form-input" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Document url</label>
+              <input v-model="form.url" class="form-input" />
+            </div>
+
+            <div class="form-group" v-if="form.projectName != 'SoulStar'">
+              <label class="form-label">Document text url</label>
+              <input v-model="form.textUrl" class="form-input" />
+            </div>
+
+            <div class="form-group" v-if="form.projectName != 'SoulStar'">
+              <label class="form-label">Upload python</label>
+              <button
+                type="button"
+                class="button button-primary"
+                @click="handleFileChange"
+                :disabled="!form.id || !form.textUrl || uploadLoading"
+              >
+                {{ uploadLoading ? '上传中...' : `${form.projectName} ===>
+                upload` }}
+              </button>
+            </div>
+
+            <div class="form-group" v-if="form.projectName != 'SoulStar'">
+              <label class="form-label">Upload excel</label>
+              <button
+                type="button"
+                class="button button-success"
+                @click="handleFileChangeExcel"
+              >
+                upload excel
+              </button>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Activity Figma</label>
+              <input v-model="form.figma" class="form-input" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Background-color</label>
+              <input v-model="form.bgc" class="form-input" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Swiper op</label>
+              <div
+                style="display: flex; gap: 10px; align-items: center; flex: 1"
+              >
+                <div class="radio-group" style="flex: none">
+                  <div
+                    v-for="option in ['true', 'false']"
+                    :key="option"
+                    :class="['radio-button', { active: form.op === option }]"
+                    @click="form.op = option"
+                  >
+                    {{ option }}
+                  </div>
+                </div>
+                <input
+                  v-model="form.opNum"
+                  class="form-input"
+                  style="width: 200px; flex: none"
+                  placeholder="swiper op num, default 1"
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Hot banner</label>
+              <div class="radio-group">
+                <div
+                  v-for="option in ['true', 'false']"
+                  :key="option"
+                  :class="['radio-button', { active: form.hot === option }]"
+                  @click="form.hot = option"
+                >
+                  {{ option }}
+                </div>
+              </div>
+            </div>
+
+            <div class="action-buttons">
+              <button
+                type="submit"
+                class="button button-primary"
+                :disabled="form.fullscreenLoading"
+              >
+                Create {{ form.projectName }} Activity
+              </button>
+
+              <button
+                v-if="form.projectName != 'Yoho'"
+                type="button"
+                class="button button-warning"
+                @click="updateBase"
+              >
+                Update Base
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- 名单上传 -->
+      <input
+        style="display: none"
+        type="file"
+        ref="excelInput"
+        accept=".xlsx,.xls"
+        @change="excelInputChange($event)"
+      />
+    </div>
+
+    <script>
+      const { createApp, ref, reactive, watch } = Vue;
+
+      const App = {
+        setup() {
+          const form = reactive({
+            projectName: "Yoho",
+            isGeneral: "false",
+            catalog: dayjs().format("YYYYMM"),
+            branch: "",
+            bgc: "",
+            name: "",
+            id: "",
+            url: "",
+            textUrl: "",
+            figma: "",
+            op: "true",
+            hot: "true",
+            info: "", // 提测信息
+            activityUrl: "", // 活动链接
+            opNum: "",
+            fullscreenLoading: false,
+          });
+
+          // 消息提示
+          const message = ref(null);
+
+          // 添加上传加载状态
+          const uploadLoading = ref(false);
+
+          // 显示消息
+          const showMessage = (text, type = "success") => {
+            message.value = { text, type };
+            setTimeout(() => {
+              message.value = null;
+            }, 5000);
+          };
+
+          // 显示 Toast 通知
+          const showToast = (message, type = "info") => {
+            const toast = document.createElement("div");
+            toast.className = `toast ${type}`;
+
+            const icons = {
+              success: "✅",
+              error: "❌",
+              info: "ℹ️",
+            };
+
+            toast.innerHTML = `
+               <div class="toast-content">
+                 <span class="toast-icon">${icons[type] || icons.info}</span>
+                 <span class="toast-message">${message}</span>
+               </div>
+             `;
+
+            const toastContainer = document.getElementById("toastContainer");
+            toastContainer.appendChild(toast);
+
+            // 触发动画
+            setTimeout(() => {
+              toast.classList.add("show");
+            }, 10);
+
+            // 自动移除
+            setTimeout(() => {
+              toast.classList.remove("show");
+              setTimeout(() => {
+                if (toast.parentNode) {
+                  toast.parentNode.removeChild(toast);
+                }
+              }, 300);
+            }, 3000);
+          };
+
+          watch(
+            () => form.isGeneral,
+            () => {
+              if (form.isGeneral == "true") {
+                form.catalog = "general";
+              } else {
+                form.catalog = dayjs().format("YYYYMM");
+              }
+            }
+          );
+
+          const setItemWithExpiry = (key, value, expiryInHours) => {
+            const now = new Date();
+            const expiryTime = now.getTime() + expiryInHours * 60 * 60 * 1000;
+            const item = {
+              value: value,
+              expiry: expiryTime,
+            };
+            localStorage.setItem(key, JSON.stringify(item));
+          };
+
+          const getItemWithExpiry = (key) => {
+            console.log("获取数据:", key);
+            const itemStr = localStorage.getItem(key);
+            if (!itemStr) {
+              return null;
+            }
+            const item = JSON.parse(itemStr);
+            const now = new Date();
+            if (now.getTime() > item.expiry) {
+              localStorage.removeItem(key);
+              return null;
+            }
+            console.log("数据有效:", item.value);
+            return item.value;
+          };
+
+          const getInfo = async () => {
+            try {
+              const response = await window.electronAPI.getActivityInfo();
+              const { data } = response;
+              Object.assign(form, data);
+              form.name = data.branch;
+
+              const oldForm = getItemWithExpiry("create_activity");
+              if (oldForm) {
+                console.log("数据有效:", oldForm);
+                oldForm &&
+                  (form.projectName = oldForm.projectName) &&
+                  (form.name = oldForm.name) &&
+                  (form.id = oldForm.id) &&
+                  (form.url = oldForm.url) &&
+                  (form.textUrl = oldForm.textUrl) &&
+                  (form.figma = oldForm.figma) &&
+                  (form.bgc = oldForm.bgc) &&
+                  (form.op = oldForm.op) &&
+                  (form.hot = oldForm.hot) &&
+                  (form.info = oldForm.info) &&
+                  (form.activityUrl = oldForm.activityUrl) &&
+                  (form.opNum = oldForm.opNum);
+              } else {
+                console.log("数据已过期或不存在");
+              }
+            } catch (error) {
+              console.error("获取信息失败:", error);
+              showToast("获取信息失败: " + error.message, "error");
+            }
+          };
+
+          const handleFileChange = async () => {
+            if (!form.id || !form.textUrl || !form.projectName) {
+              showToast("请填写项目名称、ID和文本URL", "error");
+              return;
+            }
+
+            uploadLoading.value = true;
+            // 显示loading遮罩层
+            showLoading("正在上传文本...");
+
+            try {
+              showToast(`开始上传 ${form.projectName} 文本...`, "success");
+
+              const res = await window.electronAPI.uploadActivityText(form);
+
+              if (res.data.code === 1) {
+                console.log(
+                  `Congrats, ${form.projectName} text have uploaded.`
+                );
+                showMessage(
+                  `成功上传 ${form.projectName} 文本 (${form.id})`,
+                  "success"
+                );
+              } else {
+                showToast(`上传失败: ${res.data.message}`, "error");
+              }
+            } catch (error) {
+              console.error("上传文本失败:", error);
+              showToast(
+                `上传文本失败: ${error.message || "请检查网络连接"}`,
+                "error"
+              );
+            } finally {
+              uploadLoading.value = false;
+              // 隐藏loading遮罩层
+              hideLoading();
+            }
+          };
+
+          const handleInfo = () => {
+            const map = {
+              Yoho: {
+                test: "https://activity-h5-test.yoho.media",
+                master: "https://activity-h5.yoho.media",
+              },
+              Hiyoo: {
+                test: "https://activity-h5-test.chatchill.media/activity-vite",
+                master: "https://activity-h5.chatchill.media/activity-vite",
+              },
+              SoulStar: {
+                test: "https://activity-h5-test.dopalive.com",
+                master: "https://activity-h5.dopalive.com",
+              },
+            };
+
+            const test = `${map[form.projectName].test}/act_v_${form.catalog}_${form.name}`;
+            const master = `${map[form.projectName].master}/act_v_${form.catalog}_${form.name}`;
+
+            const opTextLinks = [];
+            const opMasterLinks = [];
+            for (let i = 1; i <= form.opNum; i++) {
+              opTextLinks.push(
+                `${test}_op${form.opNum == 1 ? "" : i}/index.html?lang=&key=`
+              );
+              opMasterLinks.push(
+                `${master}_op${form.opNum == 1 ? "" : i}/index.html?lang=&key=`
+              );
+            }
+
+            const text = `🌰活动提测: ${form.url}
+      Figma: ${form.figma}
+      活动🆔: ${form.id}
+      活动链接(测试):
+      ${test}/index.html?lang=&key=
+      ${opTextLinks.join("\n")}
+      ${form.hot == "true" ? `${test}_op_hot/index.html?lang=&key=` : "--"}
+      活动链接(正式):
+      ${master}/index.html?lang=EG&key=
+      ${opMasterLinks.join("\n")}
+      ${form.hot == "true" ? `${master}_op_hot/index.html?lang=&key=` : "--"}
+      前端: ${shuffleArray(["@Stone", "@阿田", "@玄策"])}
+      后端: ${shuffleArray(["@孤狼", "@待续", "@启介", "@紫红"])}
+      测试: ${shuffleArray(["@隆多", "@保罗"])}`;
+
+            form.info = text.replace(/--\n/g, "");
+            form.activityUrl = `${master}/index.html?lang=&key=`;
+            console.log(form.info);
+          };
+
+          const updateBase = async () => {
+            const data = form;
+
+            // 显示loading遮罩层
+            showLoading("正在更新基础配置...");
+
+            try {
+              const res = await window.electronAPI.updateActivityBase(data);
+              showToast(
+                res.data.message || "更新成功",
+                res.data.code === 1 ? "success" : "error"
+              );
+            } catch (error) {
+              showToast(`更新失败: ${error.message}`, "error");
+            } finally {
+              // 隐藏loading遮罩层
+              hideLoading();
+            }
+          };
+
+          // 显示loading遮罩层
+          const showLoading = (text = "正在处理...") => {
+            const loadingOverlay = document.getElementById("loadingOverlay");
+            const loadingTime = document.getElementById("loadingTime");
+            const loadingText = document.querySelector(".loading-text");
+
+            if (loadingOverlay) {
+              loadingOverlay.style.display = "flex";
+
+              // 更新loading文本
+              if (loadingText) {
+                loadingText.textContent = text;
+              }
+
+              // 开始计时
+              let seconds = 0;
+              const timer = setInterval(() => {
+                seconds++;
+                if (loadingTime) {
+                  loadingTime.textContent = `等待: ${seconds}秒`;
+                }
+              }, 1000);
+
+              // 保存timer引用，用于清除
+              loadingOverlay.dataset.timer = timer;
+            }
+          };
+
+          // 隐藏loading遮罩层
+          const hideLoading = () => {
+            const loadingOverlay = document.getElementById("loadingOverlay");
+            if (loadingOverlay) {
+              loadingOverlay.style.display = "none";
+
+              // 清除计时器
+              if (loadingOverlay.dataset.timer) {
+                clearInterval(parseInt(loadingOverlay.dataset.timer));
+                delete loadingOverlay.dataset.timer;
+              }
+            }
+          };
+
+          const onSubmit = async () => {
+            if (!form.url) {
+              showToast(`请输入活动文档URL`, "warning");
+              return;
+            }
+            if (!form.opNum) {
+              form.opNum = 1;
+            }
+
+            // 显示loading遮罩层
+            showLoading("正在创建活动文件...");
+            form.fullscreenLoading = true;
+
+            handleInfo();
+            const data = { ...form };
+            data.op = data.op == "true" ? "1" : "0";
+            data.hot = data.hot == "true" ? "1" : "0";
+
+            console.log("data", data);
+
+            try {
+              const res = await window.electronAPI.submitActivity(data);
+              if (res.data.code === 1) {
+                showToast(`恭喜，文件创建成功！`, "success");
+              } else {
+                showToast(`创建失败: ${res.data.message}`, "error");
+              }
+            } catch (error) {
+              showToast(`创建失败: ${error.message}`, "error");
+            } finally {
+              // 隐藏loading遮罩层
+              hideLoading();
+              form.fullscreenLoading = false;
+            }
+
+            console.log("JSON.stringify(form)", JSON.stringify(form));
+            setItemWithExpiry(`create_activity`, form, 1);
+          };
+
+          function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+          }
+
+          getInfo();
+
+          const handleFileChangeExcel = async () => {
+            console.log("handleFileChangeExcel called");
+            if (!form.id) {
+              showToast("请输入活动ID", "error");
+              return;
+            }
+
+            try {
+              // 使用Electron API选择文件
+              const result = await window.electronAPI.selectFile({
+                title: "选择Excel文件",
+                filters: [{ name: "Excel Files", extensions: ["xlsx", "xls"] }],
+              });
+
+              if (result.canceled) {
+                console.log("文件选择被取消");
+                return;
+              }
+
+              console.log("选择的文件:", result.filePath);
+
+              // 显示loading遮罩层
+              showLoading("正在处理Excel文件...");
+
+              // 模拟文件选择事件
+              const mockEvent = {
+                target: {
+                  value: result.filePath,
+                  files: [
+                    {
+                      path: result.filePath,
+                      name: result.filePath.split("/").pop(),
+                    },
+                  ],
+                },
+              };
+
+              excelInputChange(mockEvent);
+            } catch (error) {
+              console.error("选择文件失败:", error);
+              showToast("选择文件失败: " + error.message, "error");
+              // 隐藏loading遮罩层
+              hideLoading();
+            }
+          };
+
+          const excelInput = ref(null);
+
+          async function excelInputChange(event) {
+            console.log("excelInputChange triggered", event);
+            console.log("File value:", event.target.value);
+
+            const filePath = event.target.value;
+            if (
+              filePath.toUpperCase().endsWith("XLSX") ||
+              filePath.toUpperCase().endsWith("XLS")
+            ) {
+              try {
+                // 使用Electron API读取文件
+                const fileData = await window.electronAPI.readFile(filePath);
+                const data = new Uint8Array(fileData);
+                const workbook = XLSX.read(data, { type: "array" });
+
+                const sheetName = workbook.SheetNames[0];
+                const sheet = workbook.Sheets[sheetName];
+
+                const columnData = {};
+                for (const cellAddress in sheet) {
+                  if (
+                    cellAddress[0] === "!" ||
+                    !sheet.hasOwnProperty(cellAddress)
+                  )
+                    continue;
+
+                  const cell = sheet[cellAddress];
+                  const columnName = cellAddress.match(/[A-Z]+/)[0];
+                  const cellValue = cell.v;
+
+                  if (!columnData[columnName]) {
+                    columnData[columnName] = [];
+                  }
+
+                  columnData[columnName].push({
+                    content: cellValue,
+                    index: cellAddress.slice(1),
+                  });
+                }
+
+                for (const columnName in columnData) {
+                  const columnValues = columnData[columnName];
+                  const _area = columnValues[0].content.replace(
+                    /[\u4e00-\u9fa5\s]/g,
+                    ""
+                  );
+                  console.log(_area, "_area");
+                  const data = {
+                    activityId: form.id,
+                    area: ["Arabic", "XM", "EG"].includes(_area)
+                      ? "ME"
+                      : ["Chinese", "CN"].includes(_area)
+                        ? "TW"
+                        : _area,
+                    content: `{"list":${JSON.stringify(columnValues)}}`,
+                    count: columnValues.length,
+                    operator: "stone@micous.com",
+                    projectName: form.projectName, // 添加项目名称
+                  };
+
+                  await upload(data);
+                }
+
+                event.target.value = "";
+                // 隐藏loading遮罩层
+                hideLoading();
+              } catch (error) {
+                console.error("读取文件失败:", error);
+                showToast("读取文件失败: " + error.message, "error");
+                // 隐藏loading遮罩层
+                hideLoading();
+              }
+            }
+          }
+
+          const upload = async (data) => {
+            if (
+              ["ENGLISH", "NOTE", "EN", "EVENTTITLE"].includes(
+                data.area.toUpperCase()
+              )
+            )
+              return;
+
+            // 添加调试信息
+            console.log("上传数据:", data);
+
+            try {
+              const res = await window.electronAPI.sendActivityText(data);
+              if (res.data.code == 1) {
+                console.log(`Congrats, ${data.area} text have uploaded.`);
+                showToast(`成功上传 ${data.area} 文本`, "success");
+              } else {
+                console.log(`Error, ${data.area} text hava error.`);
+                console.log("API响应:", res);
+                showToast(
+                  `${data.area} 文本上传出错: ${res.data.message || "未知错误"}`,
+                  "error"
+                );
+              }
+            } catch (error) {
+              console.error(`Error uploading ${data.area} text:`, error);
+              showToast(
+                `上传 ${data.area} 文本失败: ${error.message}`,
+                "error"
+              );
+            }
+          };
+
+          return {
+            form,
+            message,
+            onSubmit,
+            handleInfo,
+            handleFileChange,
+            handleFileChangeExcel,
+            updateBase,
+            uploadLoading,
+            upload,
+            excelInputChange,
+            excelInput,
+            showToast,
+          };
+        },
+      };
+
+      const app = createApp(App);
+      app.mount("#app");
+
+      // 加载导航菜单
+      async function loadNavigation() {
+        try {
+          const result =
+            await window.electronAPI.loadNavigation("createActivity");
+          if (result.success) {
+            // 注入CSS样式
+            const style = document.createElement("style");
+            style.textContent = result.css;
+            document.head.appendChild(style);
+
+            // 注入HTML内容
+            document.getElementById("nav-container").innerHTML = result.html;
+          }
+        } catch (error) {
+          console.error("Failed to load navigation:", error);
+        }
+      }
+
+      // 页面加载完成后加载导航菜单
+      loadNavigation();
+
+      // 移除强制修复导航栏样式的代码，让左侧菜单适配CSS处理
+
+      // 备用文件输入事件监听器
+      setTimeout(() => {
+        const fileInput = document.querySelector('input[type="file"]');
+        if (fileInput) {
+          console.log("Adding backup event listener to file input");
+          fileInput.addEventListener("change", (event) => {
+            console.log("Backup event listener triggered", event);
+            // 这里可以调用相同的处理函数
+          });
+        }
+      }, 1000);
+    </script>
+  </body>
+</html>

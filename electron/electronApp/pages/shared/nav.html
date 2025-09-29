@@ -1,0 +1,474 @@
+<div class="sidebar">
+  <!-- 搜索区域 -->
+  <div class="nav-search-section">
+    <div class="nav-search-container">
+      <input
+        type="text"
+        id="navSearchInput"
+        class="nav-search-input"
+        placeholder="搜索..."
+        autocomplete="off"
+      />
+      <span class="nav-search-icon">🔍</span>
+      <span class="nav-search-clear" id="navSearchClear" style="display: none"
+        >✕</span
+      >
+    </div>
+  </div>
+
+  <!-- 导航菜单 -->
+  <div class="nav-menu">
+    <a
+      href="../index/index.html"
+      class="nav-link"
+      data-page="index"
+      data-keywords="首页 工具集 快速链接 功能导航"
+    >
+      <div class="nav-content">
+        <span class="nav-icon">🏠</span>
+        <div class="nav-text-group">
+          <span class="nav-text">工具首页</span>
+          <span class="nav-desc">功能导航</span>
+        </div>
+      </div>
+    </a>
+    <a
+      href="../activityUrl/activityUrl.html"
+      class="nav-link"
+      data-page="activityUrl"
+      data-keywords="活动链接 管理 链接"
+    >
+      <div class="nav-content">
+        <span class="nav-icon">🔗</span>
+        <div class="nav-text-group">
+          <span class="nav-text">活动链接</span>
+          <span class="nav-desc">管理链接</span>
+        </div>
+      </div>
+    </a>
+    <a
+      href="../handleImg/handleImg.html"
+      class="nav-link"
+      data-page="handleImg"
+      data-keywords="图片处理 解压 扁平化 压缩 图片"
+    >
+      <div class="nav-content">
+        <span class="nav-icon">🖼️</span>
+        <div class="nav-text-group">
+          <span class="nav-text">图片处理</span>
+          <span class="nav-desc">解压压缩图片</span>
+        </div>
+      </div>
+    </a>
+    <a
+      href="../handleReward/handleReward.html"
+      class="nav-link"
+      data-page="handleReward"
+      data-keywords="配置生成 图片配置 对象"
+    >
+      <div class="nav-content">
+        <span class="nav-icon">🎯</span>
+        <div class="nav-text-group">
+          <span class="nav-text">配置生成</span>
+          <span class="nav-desc">生成图片配置</span>
+        </div>
+      </div>
+    </a>
+    <!-- <a
+      href="../createActivity/createActivity.html"
+      class="nav-link"
+      data-page="createActivity"
+      data-keywords="创建活动 自动创建 活动页面"
+    >
+      <div class="nav-content">
+        <span class="nav-icon">🚀</span>
+        <div class="nav-text-group">
+          <span class="nav-text">创建活动</span>
+          <span class="nav-desc">自动创建页面</span>
+        </div>
+      </div>
+    </a> -->
+    <a
+      href="../watchFolder/watchFolder.html"
+      class="nav-link"
+      data-page="watchFolder"
+      data-keywords="文件夹监听 自动压缩 新增图片"
+    >
+      <div class="nav-content">
+        <span class="nav-icon">👁️</span>
+        <div class="nav-text-group">
+          <span class="nav-text">文件夹监听</span>
+          <span class="nav-desc">自动压缩图片</span>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <!-- 无搜索结果提示 -->
+  <div class="no-results" style="display: none">
+    <div class="no-results-content">
+      <span class="no-results-icon">🔍</span>
+      <span class="no-results-text">未找到相关功能</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .sidebar {
+    width: 180px;
+    height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1000;
+  }
+
+  /* 搜索区域样式 */
+  .nav-search-section {
+    padding: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .nav-search-container {
+    position: relative;
+  }
+
+  .nav-search-input {
+    width: 162px;
+    padding: 10px 36px 10px 12px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    font-size: 13px;
+    outline: none;
+    transition: all 0.3s ease;
+    /* margin: 0 8px; */
+  }
+
+  .nav-search-input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .nav-search-input:focus {
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+  }
+
+  .nav-search-icon {
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    opacity: 0.7;
+  }
+
+  .nav-search-clear {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    opacity: 0.8;
+    cursor: pointer;
+    padding: 2px;
+    border-radius: 3px;
+    transition: all 0.2s ease;
+  }
+
+  .nav-search-clear:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  /* 导航菜单样式 */
+  .nav-menu {
+    flex: 1;
+    padding: 6px 0;
+    overflow-y: visible;
+  }
+
+  .nav-link {
+    display: block;
+    text-decoration: none;
+    color: white;
+    padding: 8px 8px;
+    margin: 1px 8px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .nav-link:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateX(4px);
+  }
+
+  .nav-link.active {
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .nav-content {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+  }
+
+  .nav-icon {
+    font-size: 16px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+
+  .nav-text-group {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .nav-text {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .nav-desc {
+    display: block;
+    font-size: 10px;
+    opacity: 0.8;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* 隐藏的菜单项 */
+  .nav-link.hidden {
+    opacity: 0 !important;
+    transform: translateX(-20px) !important;
+    pointer-events: none !important;
+    height: 0 !important;
+    padding: 0 20px !important;
+    margin: 0 16px !important;
+    overflow: hidden !important;
+    display: none !important;
+  }
+
+  /* 无搜索结果样式 */
+  .no-results {
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  .no-results-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .no-results-icon {
+    font-size: 48px;
+    opacity: 0.5;
+  }
+
+  .no-results-text {
+    font-size: 14px;
+    opacity: 0.7;
+  }
+
+  /* 响应式设计 */
+  @media (max-width: 768px) {
+    .sidebar {
+      width: 100%;
+      height: auto;
+      position: relative;
+    }
+
+    .nav-content {
+      gap: 12px;
+    }
+
+    .nav-icon {
+      width: 32px;
+      height: 32px;
+      font-size: 20px;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    let searchTimeout;
+
+    function getPageKey() {
+      const parts = window.location.pathname.split("/");
+      const file = parts[parts.length - 1] || "";
+      const keyFromFile = file.replace(/\.html$/i, "");
+      if (keyFromFile) return keyFromFile;
+      return parts[parts.length - 2] || "";
+    }
+
+    function findActiveLink(links, key) {
+      let link = document.querySelector(`.nav-link[data-page="${key}"]`);
+      if (link) return link;
+      for (const a of links) {
+        const href = a.getAttribute("href") || "";
+        if (href.indexOf(`${key}.html`) >= 0) return a;
+      }
+      return null;
+    }
+
+    function highlightActiveLink() {
+      const links = Array.from(document.querySelectorAll(".nav-link"));
+      const key = getPageKey();
+      const activeLink = findActiveLink(links, key);
+
+      // 移除所有active类
+      links.forEach((link) => link.classList.remove("active"));
+
+      // 添加active类到当前页面
+      if (activeLink) {
+        activeLink.classList.add("active");
+      }
+    }
+
+    function performSearch(searchTerm) {
+      const links = Array.from(document.querySelectorAll(".nav-link"));
+      const noResults = document.querySelector(".no-results");
+      let visibleCount = 0;
+
+      links.forEach((link, index) => {
+        const keywords = link.getAttribute("data-keywords") || "";
+        const text = link.querySelector(".nav-text").textContent;
+        const desc = link.querySelector(".nav-desc").textContent;
+
+        const searchText = `${keywords} ${text} ${desc}`.toLowerCase();
+        const isMatch =
+          searchTerm === "" || searchText.includes(searchTerm.toLowerCase());
+
+        if (isMatch) {
+          link.classList.remove("hidden");
+          visibleCount++;
+        } else {
+          link.classList.add("hidden");
+        }
+      });
+
+      // 显示/隐藏无结果提示
+      if (visibleCount === 0 && searchTerm !== "") {
+        if (noResults) {
+          noResults.style.display = "block";
+        }
+      } else {
+        if (noResults) {
+          noResults.style.display = "none";
+        }
+      }
+
+      // 更新搜索框的视觉反馈
+      const searchInput = document.getElementById("navSearchInput");
+      const clearBtn = document.getElementById("navSearchClear");
+
+      if (searchInput) {
+        if (searchTerm !== "") {
+          searchInput.style.background =
+            visibleCount > 0
+              ? "rgba(255, 255, 255, 0.25)"
+              : "rgba(255, 255, 255, 0.15)";
+        } else {
+          searchInput.style.background = "rgba(255, 255, 255, 0.15)";
+        }
+      }
+
+      // 显示/隐藏清除按钮
+      if (clearBtn) {
+        clearBtn.style.display = searchTerm !== "" ? "block" : "none";
+      }
+    }
+
+    function initSearch() {
+      const searchInput = document.getElementById("navSearchInput");
+      if (!searchInput) {
+        console.warn("未找到导航搜索输入框");
+        return;
+      }
+
+      console.log("初始化导航搜索功能");
+
+      searchInput.addEventListener("input", function () {
+        clearTimeout(searchTimeout);
+        const searchTerm = this.value.trim();
+
+        searchTimeout = setTimeout(() => {
+          performSearch(searchTerm);
+        }, 300);
+      });
+
+      // 清空搜索时恢复所有菜单项
+      searchInput.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") {
+          this.value = "";
+          performSearch("");
+          this.blur();
+        }
+      });
+
+      // 添加焦点事件
+      searchInput.addEventListener("focus", function () {
+        this.placeholder = "输入关键词搜索...";
+      });
+
+      searchInput.addEventListener("blur", function () {
+        this.placeholder = "搜索...";
+      });
+
+      // 清除搜索按钮
+      const clearBtn = document.getElementById("navSearchClear");
+      if (clearBtn) {
+        clearBtn.addEventListener("click", function () {
+          searchInput.value = "";
+          performSearch("");
+          searchInput.focus();
+        });
+      }
+
+      // 初始搜索（清空状态）
+      performSearch("");
+    }
+
+    function init() {
+      highlightActiveLink();
+      initSearch();
+    }
+
+    // 将搜索函数暴露到全局，方便调试
+    window.testNavSearch = function (term) {
+      console.log("手动测试搜索:", term);
+      performSearch(term);
+    };
+
+    if (document.readyState === "complete") {
+      init();
+    } else {
+      window.addEventListener("load", init);
+    }
+  })();
+</script>

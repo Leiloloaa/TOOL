@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <title>🛠️左侧菜单适配测试</title>
+    <link rel="stylesheet" href="./sidebar-adapter.css" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        color: #333;
+      }
+
+      .container {
+        padding: 20px;
+        min-height: 100vh;
+      }
+
+      .main-content {
+        background: white;
+        border-radius: 25px;
+        padding: 40px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      }
+
+      .content-header {
+        text-align: center;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #f0f0f0;
+      }
+
+      .content-header h2 {
+        font-size: 2rem;
+        color: #333;
+        margin-bottom: 10px;
+        font-weight: 700;
+      }
+
+      .content-header p {
+        font-size: 1.1rem;
+        color: #666;
+        font-weight: 400;
+      }
+
+      .test-section {
+        margin-bottom: 30px;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 15px;
+        border-left: 4px solid #667eea;
+      }
+
+      .test-section h3 {
+        color: #333;
+        margin-bottom: 15px;
+      }
+
+      .test-section p {
+        color: #666;
+        line-height: 1.6;
+      }
+
+      .status-indicator {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        background: #e8f5e8;
+        border-radius: 20px;
+        color: #52c41a;
+        font-weight: 500;
+      }
+
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #52c41a;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+
+  <body class="test-sidebar-page">
+    <div class="container">
+      <div id="navContainer"></div>
+
+      <div class="main-content">
+        <div class="content-header">
+          <h2>左侧菜单适配测试</h2>
+          <p>验证所有页面的左侧菜单适配效果</p>
+        </div>
+
+        <div class="test-section">
+          <h3>✅ 适配状态</h3>
+          <p>所有页面已成功适配左侧菜单布局：</p>
+          <ul style="margin: 15px 0; padding-left: 20px">
+            <li>handleImg - 图片处理工具</li>
+            <li>handleReward - 配置生成工具</li>
+            <li>activityUrl - 活动链接管理</li>
+            <li>createActivity - 创建活动页面</li>
+            <li>watchFolder - 文件夹监听工具</li>
+          </ul>
+          <div class="status-indicator">
+            <span class="status-dot"></span>
+            <span>适配完成</span>
+          </div>
+        </div>
+
+        <div class="test-section">
+          <h3>🎨 适配特性</h3>
+          <p>
+            <strong>布局适配：</strong
+            >所有页面内容区域自动为左侧菜单留出180px空间
+          </p>
+          <p><strong>响应式设计：</strong>移动端自动切换为顶部导航布局</p>
+          <p><strong>视觉优化：</strong>圆角、阴影、间距等细节统一优化</p>
+          <p><strong>层级管理：</strong>确保加载遮罩和通知正确显示</p>
+        </div>
+
+        <div class="test-section">
+          <h3>🔧 技术实现</h3>
+          <p>
+            <strong>CSS适配：</strong>使用
+            <code>sidebar-adapter.css</code> 统一管理所有页面适配
+          </p>
+          <p>
+            <strong>页面标识：</strong>每个页面添加对应的CSS类名进行精确适配
+          </p>
+          <p>
+            <strong>优先级控制：</strong>使用
+            <code>!important</code> 确保适配样式生效
+          </p>
+          <p><strong>兼容性：</strong>保持原有页面功能不变，仅调整布局</p>
+        </div>
+
+        <div class="test-section">
+          <h3>📱 响应式断点</h3>
+          <p><strong>桌面端：</strong>≥768px - 左侧菜单固定显示（180px宽度）</p>
+          <p><strong>移动端：</strong>&lt;768px - 菜单切换为顶部导航</p>
+          <p><strong>过渡动画：</strong>300ms平滑过渡效果</p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // 加载导航菜单
+      fetch("../shared/nav.html")
+        .then((response) => response.text())
+        .then((html) => {
+          document.getElementById("navContainer").innerHTML = html;
+        })
+        .catch((error) => {
+          console.error("加载导航菜单失败:", error);
+        });
+    </script>
+  </body>
+</html>
