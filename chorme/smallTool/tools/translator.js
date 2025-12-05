@@ -55,7 +55,15 @@ const Translator = {
     try {
       const translatedText = await this.translateText(sourceText);
       this.targetTextEl.value = translatedText;
-      window.showStatusMessage('翻译完成！', 'success');
+      
+      // 自动复制到剪贴板
+      try {
+        await this.copyToClipboard(translatedText);
+        window.showStatusMessage('翻译完成并已复制到剪贴板！', 'success');
+      } catch (copyError) {
+        console.error('复制失败:', copyError);
+        window.showStatusMessage('翻译完成，但复制失败', 'success');
+      }
     } catch (error) {
       console.error('翻译失败:', error);
       window.showStatusMessage(`翻译失败: ${error.message}`, 'error');
@@ -128,6 +136,46 @@ const Translator = {
     }
     
     throw new Error(data.responseData?.error || '翻译失败');
+  },
+  
+  /**
+   * 复制文本到剪贴板
+   * @param {string} text - 要复制的文本
+   * @returns {Promise<void>}
+   */
+  async copyToClipboard(text) {
+    // 使用 Clipboard API（需要权限）
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      try {
+        await navigator.clipboard.writeText(text);
+        return;
+      } catch (error) {
+        // 如果 Clipboard API 失败，使用备用方法
+        console.warn('Clipboard API 失败，使用备用方法:', error);
+      }
+    }
+    
+    // 备用方法：使用传统的 execCommand
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-999999px';
+    textArea.style.top = '-999999px';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    
+    try {
+      const successful = document.execCommand('copy');
+      document.body.removeChild(textArea);
+      
+      if (!successful) {
+        throw new Error('execCommand 复制失败');
+      }
+    } catch (error) {
+      document.body.removeChild(textArea);
+      throw error;
+    }
   },
   
   /**

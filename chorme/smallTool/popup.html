@@ -1,121 +1,133 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>小工具集合</title>
-  <link rel="stylesheet" href="popup.css">
-</head>
-<body>
-  <div class="container">
-    <header class="header">
-      <h1>🔧 小工具集合</h1>
-    </header>
-    
-    <nav class="tool-nav">
-      <button class="tool-tab active" data-tool="translator">翻译工具</button>
-      <button class="tool-tab" data-tool="camelcase">小驼峰转换</button>
-      <button class="tool-tab" data-tool="qrcode">二维码生成</button>
-      <!-- 未来可以添加更多工具标签 -->
-    </nav>
-    
-    <main class="tool-content">
-      <!-- 翻译工具 -->
-      <div id="translator-tool" class="tool-panel active">
-        <div class="tool-header">
-          <h2>中英文翻译</h2>
-        </div>
-        <div class="input-section">
-          <label for="source-text">输入中文：</label>
-          <textarea 
-            id="source-text" 
-            placeholder="请输入要翻译的中文内容..."
-            rows="4"
-          ></textarea>
-        </div>
-        <div class="button-section">
-          <button id="translate-btn" class="primary-btn">翻译</button>
-          <button id="clear-btn" class="secondary-btn">清空</button>
-        </div>
-        <div class="output-section">
-          <label for="target-text">英文翻译：</label>
-          <textarea 
-            id="target-text" 
-            placeholder="翻译结果将显示在这里..."
-            rows="4"
-            readonly
-          ></textarea>
-        </div>
-        <div id="status-message" class="status-message"></div>
-      </div>
-      
-      <!-- 小驼峰转换工具 -->
-      <div id="camelcase-tool" class="tool-panel">
-        <div class="tool-header">
-          <h2>小驼峰转换</h2>
-        </div>
-        <div class="input-section">
-          <label for="camelcase-source-text">输入文本：</label>
-          <textarea 
-            id="camelcase-source-text" 
-            placeholder="例如：Alibaba Cloud、user-name、hello_world..."
-            rows="4"
-          ></textarea>
-        </div>
-        <div class="button-section">
-          <button id="camelcase-convert-btn" class="primary-btn">转换并复制</button>
-          <button id="camelcase-clear-btn" class="secondary-btn">清空</button>
-        </div>
-        <div class="output-section">
-          <label for="camelcase-target-text">小驼峰结果：</label>
-          <textarea 
-            id="camelcase-target-text" 
-            placeholder="转换结果将显示在这里，并自动复制到剪贴板..."
-            rows="4"
-            readonly
-          ></textarea>
-        </div>
-        <div id="camelcase-status-message" class="status-message"></div>
-      </div>
-      
-      <!-- 二维码生成工具 -->
-      <div id="qrcode-tool" class="tool-panel">
-        <div class="tool-header">
-          <h2>二维码生成</h2>
-        </div>
-        <div class="input-section">
-          <label for="qrcode-url-input">链接地址：</label>
-          <div class="input-with-button">
-            <input 
-              type="text" 
-              id="qrcode-url-input" 
-              placeholder="自动获取当前页面链接，或手动输入链接..."
-              class="url-input"
-            />
-            <button id="qrcode-get-current-btn" class="secondary-btn small-btn" title="点击获取当前标签页的 URL">获取当前页面</button>
-          </div>
-        </div>
-        <div class="button-section">
-          <button id="qrcode-generate-btn" class="primary-btn">生成二维码</button>
-          <button id="qrcode-clear-btn" class="secondary-btn">清空</button>
-        </div>
-        <div class="qrcode-output-section">
-          <div id="qrcode-canvas" class="qrcode-canvas-container">
-            <p class="qrcode-placeholder">二维码将显示在这里</p>
-          </div>
-          <button id="qrcode-download-btn" class="secondary-btn" style="display: none; margin-top: 10px; width: 100%;">下载二维码</button>
-        </div>
-        <div id="qrcode-status-message" class="status-message"></div>
-      </div>
-      
-      <!-- 未来可以添加更多工具面板 -->
-    </main>
-  </div>
-  
-  <script src="tools/translator.js"></script>
-  <script src="tools/camelCase.js"></script>
-  <script src="tools/qrcode.js"></script>
-  <script src="popup.js"></script>
-</body>
-</html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>小工具集合</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <h1>🔧 小工具集合</h1>
+      </header>
 
+      <nav class="tool-nav">
+        <button class="tool-tab active" data-tool="translator">翻译工具</button>
+        <button class="tool-tab" data-tool="camelcase">小驼峰转换</button>
+        <button class="tool-tab" data-tool="qrcode">二维码生成</button>
+        <!-- 未来可以添加更多工具标签 -->
+      </nav>
+
+      <main class="tool-content">
+        <!-- 翻译工具 -->
+        <div id="translator-tool" class="tool-panel active">
+          <div class="tool-header">
+            <h2>中英文翻译</h2>
+          </div>
+          <div class="input-section">
+            <label for="source-text">输入中文：</label>
+            <textarea
+              id="source-text"
+              placeholder="请输入要翻译的中文内容..."
+              rows="4"
+            ></textarea>
+          </div>
+          <div class="button-section">
+            <button id="translate-btn" class="primary-btn">翻译并复制</button>
+            <button id="clear-btn" class="secondary-btn">清空</button>
+          </div>
+          <div class="output-section">
+            <label for="target-text">英文翻译：</label>
+            <textarea
+              id="target-text"
+              placeholder="翻译结果将显示在这里..."
+              rows="4"
+              readonly
+            ></textarea>
+          </div>
+          <div id="status-message" class="status-message"></div>
+        </div>
+
+        <!-- 小驼峰转换工具 -->
+        <div id="camelcase-tool" class="tool-panel">
+          <div class="tool-header">
+            <h2>小驼峰转换</h2>
+          </div>
+          <div class="input-section">
+            <label for="camelcase-source-text">输入文本：</label>
+            <textarea
+              id="camelcase-source-text"
+              placeholder="例如：Alibaba Cloud、user-name、hello_world..."
+              rows="4"
+            ></textarea>
+          </div>
+          <div class="button-section">
+            <button id="camelcase-convert-btn" class="primary-btn">
+              转换并复制
+            </button>
+            <button id="camelcase-clear-btn" class="secondary-btn">清空</button>
+          </div>
+          <div class="output-section">
+            <label for="camelcase-target-text">小驼峰结果：</label>
+            <textarea
+              id="camelcase-target-text"
+              placeholder="转换结果将显示在这里，并自动复制到剪贴板..."
+              rows="4"
+              readonly
+            ></textarea>
+          </div>
+          <div id="camelcase-status-message" class="status-message"></div>
+        </div>
+
+        <!-- 二维码生成工具 -->
+        <div id="qrcode-tool" class="tool-panel">
+          <div class="qrcode-output-section">
+            <div id="qrcode-canvas" class="qrcode-canvas-container">
+              <p class="qrcode-placeholder">二维码将显示在这里</p>
+            </div>
+            <button
+              id="qrcode-download-btn"
+              class="secondary-btn"
+              style="display: none; margin-top: 10px; width: 100%"
+            >
+              下载二维码
+            </button>
+          </div>
+          <div class="input-section">
+            <label for="qrcode-url-input">链接地址：</label>
+            <div class="input-with-button">
+              <input
+                type="text"
+                id="qrcode-url-input"
+                placeholder="自动获取当前页面链接，或手动输入链接..."
+                class="url-input"
+              />
+              <button
+                id="qrcode-get-current-btn"
+                class="secondary-btn small-btn"
+                title="点击获取当前标签页的 URL"
+              >
+                获取当前页面
+              </button>
+            </div>
+          </div>
+          <div class="button-section">
+            <button id="qrcode-generate-btn" class="primary-btn">
+              生成二维码
+            </button>
+            <button id="qrcode-clear-btn" class="secondary-btn">清空</button>
+          </div>
+          <div id="qrcode-status-message" class="status-message"></div>
+        </div>
+
+        <!-- 未来可以添加更多工具面板 -->
+      </main>
+    </div>
+
+    <script src="tools/translator.js"></script>
+    <script src="tools/camelCase.js"></script>
+    <script src="tools/qrcode.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>
