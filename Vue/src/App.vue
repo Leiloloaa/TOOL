@@ -232,12 +232,12 @@ const generateReferenceError = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+  gap: 3rem;
   margin-top: 1rem;
 }
 
 .count {
-  font-size: 2rem;
+  font-size: 10rem;
   font-weight: bold;
   min-width: 3rem;
   text-align: center;

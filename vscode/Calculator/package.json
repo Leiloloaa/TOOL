@@ -2,7 +2,7 @@
   "name": "code-inline-calculator",
   "displayName": "Code Inline Calculator",
   "description": "这是一款简洁的代码内联计算器，支持输入触发弹框、实时计算和一键替换",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "publisher": "devtools-helper",
   "engines": {
     "vscode": "^1.74.0"
@@ -21,6 +21,7 @@
     "表达式"
   ],
   "activationEvents": [
+    "onStartupFinished",
     "*"
   ],
   "main": "./out/extension.js",
