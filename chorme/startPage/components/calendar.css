@@ -1,6 +1,15 @@
 /* ========== 日历组件样式 ========== */
 .calendar {
   width: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+  /* 隐藏滚动条 */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+.calendar::-webkit-scrollbar {
+  display: none; /* Chrome/Safari/Opera */
 }
 
 .calendar-header {
@@ -210,3 +219,134 @@
   color: #fff;
 }
 
+/* ========== 响应式调整 ========== */
+
+/* 平板及小屏幕 */
+@media (max-width: 768px) {
+  .calendar-header {
+    margin-bottom: 10px;
+  }
+
+  .calendar-title {
+    font-size: 13px;
+  }
+
+  .calendar-nav {
+    width: 26px;
+    height: 26px;
+    font-size: 16px;
+  }
+
+  .calendar-weekdays {
+    margin-bottom: 6px;
+  }
+
+  .calendar-weekdays span {
+    font-size: 10px;
+    padding: 3px 0;
+  }
+
+  .calendar-day {
+    font-size: 12px;
+    min-height: 36px;
+    padding: 2px 1px;
+  }
+
+  .lunar-text {
+    font-size: 8px;
+  }
+
+  .day-badge {
+    font-size: 7px;
+    padding: 1px 2px;
+  }
+}
+
+/* 手机小屏幕 */
+@media (max-width: 480px) {
+  .calendar-header {
+    margin-bottom: 8px;
+  }
+
+  .calendar-title {
+    font-size: 12px;
+  }
+
+  .calendar-nav {
+    width: 24px;
+    height: 24px;
+    font-size: 14px;
+  }
+
+  .calendar-weekdays {
+    gap: 1px;
+    margin-bottom: 4px;
+  }
+
+  .calendar-weekdays span {
+    font-size: 9px;
+    padding: 2px 0;
+  }
+
+  .calendar-days {
+    gap: 1px;
+  }
+
+  .calendar-day {
+    font-size: 11px;
+    min-height: 32px;
+    padding: 2px 0;
+    border-radius: 4px;
+  }
+
+  .day-num {
+    font-weight: 500;
+  }
+
+  .lunar-text {
+    font-size: 7px;
+    margin-top: 0;
+  }
+
+  .day-badge {
+    font-size: 6px;
+    padding: 0 2px;
+    top: 1px;
+    right: 1px;
+  }
+
+  .calendar-day.today {
+    border-radius: 4px;
+  }
+}
+
+/* 超小屏幕 */
+@media (max-width: 360px) {
+  .calendar-title {
+    font-size: 11px;
+  }
+
+  .calendar-nav {
+    width: 22px;
+    height: 22px;
+    font-size: 12px;
+  }
+
+  .calendar-weekdays span {
+    font-size: 8px;
+  }
+
+  .calendar-day {
+    font-size: 10px;
+    min-height: 28px;
+  }
+
+  .lunar-text {
+    display: none;
+  }
+
+  .day-badge {
+    font-size: 5px;
+    padding: 0 1px;
+  }
+}

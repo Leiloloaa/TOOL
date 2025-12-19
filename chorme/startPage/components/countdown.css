@@ -3,8 +3,11 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  max-height: 300px;
+  max-height: 100%;
   overflow-y: auto;
+  /* 隐藏滚动条 */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
 }
 
 .countdown-item-wrapper {
@@ -150,34 +153,175 @@
   opacity: 0.7;
 }
 
-/* 响应式调整 */
+/* ========== 响应式调整 ========== */
+
+/* 平板及小屏幕 */
 @media (max-width: 768px) {
+  .countdown-list {
+    gap: 10px;
+    max-height: 260px;
+  }
+
+  .countdown-item-wrapper {
+    padding: 10px;
+    border-radius: 8px;
+  }
+
+  .countdown-header {
+    margin-bottom: 8px;
+  }
+
+  .countdown-title {
+    font-size: 12px;
+  }
+
+  .countdown-timer {
+    gap: 3px;
+  }
+
+  .countdown-unit {
+    min-width: 32px;
+  }
+
   .countdown-value {
     font-size: 18px;
     padding: 3px 6px;
     min-width: 32px;
+    border-radius: 5px;
+  }
+
+  .countdown-label {
+    font-size: 9px;
   }
 
   .countdown-separator {
     font-size: 16px;
+    margin-bottom: 12px;
+  }
+
+  .countdown-target {
+    font-size: 10px;
+    margin-top: 6px;
+  }
+
+  .countdown-edit,
+  .countdown-delete {
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
   }
 }
 
-/* 滚动条样式 */
+/* 手机小屏幕 */
+@media (max-width: 480px) {
+  .countdown-list {
+    gap: 8px;
+    max-height: 220px;
+  }
+
+  .countdown-item-wrapper {
+    padding: 8px;
+    border-radius: 6px;
+  }
+
+  .countdown-header {
+    margin-bottom: 6px;
+  }
+
+  .countdown-title {
+    font-size: 11px;
+  }
+
+  .countdown-actions {
+    opacity: 1;
+  }
+
+  .countdown-timer {
+    gap: 2px;
+  }
+
+  .countdown-unit {
+    min-width: 28px;
+  }
+
+  .countdown-value {
+    font-size: 16px;
+    padding: 2px 5px;
+    min-width: 28px;
+    border-radius: 4px;
+  }
+
+  .countdown-label {
+    font-size: 8px;
+    margin-top: 1px;
+  }
+
+  .countdown-separator {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+
+  .countdown-target {
+    font-size: 9px;
+    margin-top: 4px;
+  }
+
+  .countdown-edit,
+  .countdown-delete {
+    width: 18px;
+    height: 18px;
+    font-size: 11px;
+  }
+
+  .countdown-empty {
+    padding: 15px;
+  }
+
+  .countdown-hint {
+    font-size: 11px;
+  }
+}
+
+/* 超小屏幕 */
+@media (max-width: 360px) {
+  .countdown-list {
+    gap: 6px;
+    max-height: 180px;
+  }
+
+  .countdown-item-wrapper {
+    padding: 6px;
+  }
+
+  .countdown-title {
+    font-size: 10px;
+  }
+
+  .countdown-unit {
+    min-width: 24px;
+  }
+
+  .countdown-value {
+    font-size: 14px;
+    padding: 2px 4px;
+    min-width: 24px;
+  }
+
+  .countdown-label {
+    font-size: 7px;
+  }
+
+  .countdown-separator {
+    font-size: 12px;
+    margin-bottom: 8px;
+  }
+
+  .countdown-target {
+    font-size: 8px;
+  }
+}
+
+/* 隐藏滚动条 - Chrome/Safari/Opera */
 .countdown-list::-webkit-scrollbar {
-  width: 4px;
+  display: none;
 }
-
-.countdown-list::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.countdown-list::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.1);
-  border-radius: 2px;
-}
-
-.countdown-list::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.2);
-}
-

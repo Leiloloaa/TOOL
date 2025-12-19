@@ -274,6 +274,9 @@ body.widgets-mode .widgets-container {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   width: 300px;
+  max-height: calc(50vh - 30px);
+  display: flex;
+  flex-direction: column;
   transition: all 0.3s ease;
 }
 
@@ -315,6 +318,16 @@ body.widgets-mode .widgets-container {
 
 .widget-content {
   padding: 16px;
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+  /* 隐藏滚动条 */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.widget-content::-webkit-scrollbar {
+  display: none;
 }
 
 .widget.hidden {
@@ -761,6 +774,7 @@ body:not(.widgets-mode) .countdown-settings {
   .widget {
     width: calc(50% - 8px);
     min-width: 280px;
+    max-height: 40vh;
   }
 
   .settings-panel {
