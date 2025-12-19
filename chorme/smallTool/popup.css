@@ -6,30 +6,30 @@
 
 body {
   width: 400px;
-  min-height: 500px;
+  height: 560px;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei",
     sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
   color: #333;
-  overflow: hidden; /* 隐藏滚动条 */
+  overflow: hidden;
 }
 
 html {
-  overflow: hidden; /* 隐藏滚动条 */
+  overflow: hidden;
 }
 
 .container {
   background: white;
   border-radius: 8px;
-  overflow: hidden;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  max-height: 600px; /* 限制最大高度 */
+  height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
   color: white;
   padding: 15px 20px;
   text-align: center;
@@ -43,21 +43,23 @@ html {
 
 .tool-nav {
   display: flex;
+  flex-wrap: wrap;
   background: #f5f5f5;
   border-bottom: 1px solid #e0e0e0;
-  padding: 0 10px;
+  padding: 4px 6px;
+  gap: 4px;
 }
 
 .tool-tab {
-  flex: 1;
-  padding: 12px 16px;
+  flex: 0 0 auto;
+  padding: 8px 12px;
   background: transparent;
   border: none;
-  border-bottom: 3px solid transparent;
+  border-radius: 4px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 12px;
   color: #666;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   font-weight: 500;
 }
 
@@ -67,24 +69,32 @@ html {
 }
 
 .tool-tab.active {
-  color: #667eea;
-  border-bottom-color: #667eea;
-  background: white;
+  color: white;
+  background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
 }
 
 .tool-content {
-  padding: 20px;
-  overflow: hidden; /* 隐藏滚动条 */
+  padding: 16px;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.tool-content::-webkit-scrollbar {
+  display: none;
+}
+
+.tool-content {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .tool-panel {
   display: none;
-  overflow: hidden; /* 隐藏滚动条 */
 }
 
 .tool-panel.active {
   display: block;
-  overflow: hidden; /* 隐藏滚动条 */
 }
 
 .tool-header {
@@ -123,7 +133,7 @@ textarea {
 
 textarea:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #74b9ff;
 }
 
 textarea[readonly] {
@@ -149,13 +159,13 @@ button {
 }
 
 .primary-btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
   color: white;
 }
 
 .primary-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 4px 8px rgba(9, 132, 227, 0.4);
 }
 
 .primary-btn:active {
@@ -227,7 +237,7 @@ button {
 
 .url-input:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #74b9ff;
 }
 
 .small-btn {
@@ -265,4 +275,323 @@ button {
   color: #999;
   font-size: 14px;
   margin: 0;
+}
+
+/* 暗黑模式工具样式 */
+.darkmode-description {
+  text-align: center;
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.darkmode-toggle-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.darkmode-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: none !important;
+  width: 140px !important;
+  min-width: 140px;
+  max-width: 140px;
+  height: 140px !important;
+  min-height: 140px;
+  max-height: 140px;
+  padding: 20px !important;
+  border-radius: 50% !important;
+  background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%);
+  color: white;
+  border: 4px solid #34495e;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.darkmode-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.darkmode-btn.active {
+  background: linear-gradient(135deg, #f39c12 0%, #e74c3c 100%);
+  border-color: #f1c40f;
+}
+
+.darkmode-icon {
+  font-size: 42px;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.darkmode-text {
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.darkmode-options {
+  background: #f9f9f9;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.option-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  font-size: 13px;
+  color: #555;
+}
+
+.option-item:last-child {
+  margin-bottom: 0;
+}
+
+.option-item input[type="range"] {
+  flex: 1;
+  height: 6px;
+  -webkit-appearance: none;
+  background: #ddd;
+  border-radius: 3px;
+  outline: none;
+}
+
+.option-item input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.option-item span {
+  min-width: 100px;
+  text-align: right;
+}
+
+/* 二维码模式切换 */
+.qrcode-mode-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.qrcode-mode-tab {
+  flex: 1;
+  padding: 10px;
+  background: #f5f5f5;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #666;
+  transition: all 0.2s ease;
+}
+
+.qrcode-mode-tab:hover {
+  background: #e8e8e8;
+}
+
+.qrcode-mode-tab.active {
+  background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+  color: white;
+  border-color: transparent;
+}
+
+.qrcode-mode-panel {
+  display: none;
+}
+
+.qrcode-mode-panel.active {
+  display: block;
+}
+
+/* 时间戳工具样式 */
+.timestamp-current {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  background: #f9f9f9;
+  border-radius: 6px;
+  margin-bottom: 16px;
+}
+
+.timestamp-current span:first-child {
+  color: #666;
+  font-size: 13px;
+}
+
+.timestamp-value {
+  font-family: "Monaco", "Menlo", monospace;
+  font-size: 16px;
+  font-weight: 600;
+  color: #74b9ff;
+}
+
+.timestamp-current .small-btn {
+  margin-left: auto;
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+/* 上传区域样式 */
+.upload-section {
+  margin-bottom: 16px;
+}
+
+.upload-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 20px;
+  background: #f9f9f9;
+  border: 2px dashed #e0e0e0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.upload-label:hover,
+.upload-label.dragover {
+  background: #f0f0f0;
+  border-color: #74b9ff;
+}
+
+.upload-icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.upload-label span:last-child {
+  font-size: 13px;
+  color: #666;
+}
+
+/* 图片预览 */
+.image-preview-section,
+.decode-preview-section {
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.image-preview-section img,
+.decode-preview-section img {
+  max-width: 100%;
+  max-height: 150px;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+}
+
+/* 密码工具样式 */
+.password-options {
+  background: #f9f9f9;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 13px;
+  color: #555;
+  cursor: pointer;
+}
+
+.checkbox-item:last-child {
+  margin-bottom: 0;
+}
+
+.checkbox-item input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.password-output-wrapper {
+  display: flex;
+  gap: 8px;
+}
+
+.password-display {
+  font-family: "Monaco", "Menlo", monospace;
+  letter-spacing: 1px;
+}
+
+.tool-header {
+  margin-bottom: 12px;
+}
+
+.tool-header h2 {
+  font-size: 16px;
+}
+
+/* 紧凑型输入框 */
+.input-section,
+.output-section {
+  margin-bottom: 12px;
+}
+
+label {
+  margin-bottom: 6px;
+  font-size: 13px;
+}
+
+textarea {
+  padding: 10px;
+  font-size: 13px;
+}
+
+.button-section {
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+button {
+  padding: 10px 16px;
+  font-size: 13px;
+}
+
+.small-btn {
+  padding: 10px 12px;
+  font-size: 12px;
+}
+
+/* 二维码容器紧凑 */
+.qrcode-canvas-container {
+  min-height: 180px;
+  max-height: 180px;
+  padding: 15px;
+}
+
+/* 暗黑模式按钮紧凑 */
+.darkmode-btn {
+  width: 120px !important;
+  min-width: 120px;
+  max-width: 120px;
+  height: 120px !important;
+  min-height: 120px;
+  max-height: 120px;
+}
+
+.darkmode-icon {
+  font-size: 36px;
+}
+
+.darkmode-options {
+  padding: 12px;
+  margin-bottom: 12px;
 }

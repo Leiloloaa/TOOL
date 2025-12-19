@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "标签页",
+  "version": "1.0.0",
+  "description": "一个美观的 Chrome 起始页，支持组件模式和极简模式，动态壁纸，多搜索引擎",
+  "permissions": ["storage"],
+  "host_permissions": ["https://*/*", "http://*/*"],
+  "chrome_url_overrides": {
+    "newtab": "newtab.html"
+  },
+  "icons": {
+    "48": "icons/icon.png",
+    "128": "icons/icon.png"
+  }
+}

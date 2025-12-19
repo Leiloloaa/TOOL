@@ -18,6 +18,31 @@ document.addEventListener("DOMContentLoaded", () => {
   if (typeof QRCodeTool !== "undefined") {
     QRCodeTool.init();
   }
+
+  // 初始化 JSON 美化工具
+  if (typeof JSONTool !== "undefined") {
+    JSONTool.init();
+  }
+
+  // 初始化时间戳转换工具
+  if (typeof TimestampTool !== "undefined") {
+    TimestampTool.init();
+  }
+
+  // 初始化图片转 Base64 工具
+  if (typeof Base64ImgTool !== "undefined") {
+    Base64ImgTool.init();
+  }
+
+  // 初始化密码生成器
+  if (typeof PasswordTool !== "undefined") {
+    PasswordTool.init();
+  }
+
+  // 初始化暗黑模式工具
+  if (typeof DarkModeTool !== "undefined") {
+    DarkModeTool.init();
+  }
 });
 
 /**

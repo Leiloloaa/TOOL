@@ -1,19 +1,35 @@
-// 二维码生成工具模块
+// 二维码工具模块（生成 + 解码）
 
 const QRCodeTool = {
+  // 生成模式元素
   urlInputEl: null,
   qrcodeCanvasEl: null,
   getCurrentUrlBtn: null,
   generateBtn: null,
   clearBtn: null,
   downloadBtn: null,
+
+  // 解码模式元素
+  uploadEl: null,
+  decodePreviewSection: null,
+  decodePreviewImg: null,
+  decodeResultEl: null,
+  decodeCopyBtn: null,
+  decodeOpenBtn: null,
+
+  // 模式切换
+  modeTabs: null,
+  generateModePanel: null,
+  decodeModePanel: null,
+
   qrcodeInstance: null,
-  isManualInput: false, // 标记是否为手动输入
+  isManualInput: false,
 
   /**
-   * 初始化二维码生成工具
+   * 初始化二维码工具
    */
   async init() {
+    // 生成模式元素
     this.urlInputEl = document.getElementById("qrcode-url-input");
     this.qrcodeCanvasEl = document.getElementById("qrcode-canvas");
     this.getCurrentUrlBtn = document.getElementById("qrcode-get-current-btn");
@@ -21,22 +37,39 @@ const QRCodeTool = {
     this.clearBtn = document.getElementById("qrcode-clear-btn");
     this.downloadBtn = document.getElementById("qrcode-download-btn");
 
-    if (!this.urlInputEl || !this.qrcodeCanvasEl || !this.generateBtn) {
+    // 解码模式元素
+    this.uploadEl = document.getElementById("qrcode-upload");
+    this.decodePreviewSection = document.getElementById(
+      "decode-preview-section"
+    );
+    this.decodePreviewImg = document.getElementById("decode-preview");
+    this.decodeResultEl = document.getElementById("qrcode-decode-result");
+    this.decodeCopyBtn = document.getElementById("qrcode-decode-copy-btn");
+    this.decodeOpenBtn = document.getElementById("qrcode-decode-open-btn");
+
+    // 模式切换
+    this.modeTabs = document.querySelectorAll(".qrcode-mode-tab");
+    this.generateModePanel = document.getElementById("qrcode-generate-mode");
+    this.decodeModePanel = document.getElementById("qrcode-decode-mode");
+
+    if (!this.urlInputEl || !this.qrcodeCanvasEl) {
       console.error("二维码工具元素未找到");
       return;
     }
 
-    // Manifest V3 的 CSP 限制，直接使用在线 API 生成二维码
-    console.log("使用在线 API 生成二维码");
+    // 初始化模式切换
+    this.initModeTabs();
 
-    // 绑定事件
+    // 绑定生成模式事件
     if (this.getCurrentUrlBtn) {
       this.getCurrentUrlBtn.addEventListener("click", () => {
-        this.isManualInput = false; // 重置手动输入标记
+        this.isManualInput = false;
         this.getCurrentUrl();
       });
     }
-    this.generateBtn.addEventListener("click", () => this.generate());
+    if (this.generateBtn) {
+      this.generateBtn.addEventListener("click", () => this.generate());
+    }
     if (this.clearBtn) {
       this.clearBtn.addEventListener("click", () => this.clear());
     }
@@ -44,28 +77,64 @@ const QRCodeTool = {
       this.downloadBtn.addEventListener("click", () => this.download());
     }
 
+    // 绑定解码模式事件
+    if (this.uploadEl) {
+      this.uploadEl.addEventListener("change", (e) =>
+        this.handleDecodeUpload(e)
+      );
+    }
+    if (this.decodeCopyBtn) {
+      this.decodeCopyBtn.addEventListener("click", () =>
+        this.copyDecodeResult()
+      );
+    }
+    if (this.decodeOpenBtn) {
+      this.decodeOpenBtn.addEventListener("click", () =>
+        this.openDecodeResult()
+      );
+    }
+
     // 支持回车快捷键
     this.urlInputEl.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
-        e.preventDefault();
-        this.generate();
-      } else if (e.key === "Enter") {
-        // 普通回车键也触发生成
+      if (e.key === "Enter") {
         e.preventDefault();
         this.generate();
       }
     });
 
-    // 监听输入框变化，当用户手动输入时，不自动获取当前页面
+    // 监听输入框变化
     this.urlInputEl.addEventListener("input", () => {
-      // 用户正在输入，标记为手动输入模式
       this.isManualInput = true;
     });
 
-    // 监听工具面板激活事件，自动获取当前页面
+    // 监听工具面板激活事件
     this.observePanelActivation();
+  },
 
-    // 不再在初始化时自动获取，只在切换到该 tab 时获取
+  /**
+   * 初始化模式标签切换
+   */
+  initModeTabs() {
+    if (!this.modeTabs) return;
+
+    this.modeTabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const mode = tab.getAttribute("data-mode");
+
+        // 更新标签状态
+        this.modeTabs.forEach((t) => t.classList.remove("active"));
+        tab.classList.add("active");
+
+        // 切换面板
+        if (mode === "generate") {
+          this.generateModePanel?.classList.add("active");
+          this.decodeModePanel?.classList.remove("active");
+        } else {
+          this.generateModePanel?.classList.remove("active");
+          this.decodeModePanel?.classList.add("active");
+        }
+      });
+    });
   },
 
   /**
@@ -406,5 +475,142 @@ const QRCodeTool = {
     // 清空后自动获取当前页面
     this.getCurrentUrl();
     window.hideStatusMessage();
+  },
+
+  // ==================== 解码功能 ====================
+
+  /**
+   * 处理解码上传
+   */
+  handleDecodeUpload(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      window.showStatusMessage("请选择图片文件", "error");
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      const dataUrl = e.target.result;
+
+      // 显示预览
+      if (this.decodePreviewSection && this.decodePreviewImg) {
+        this.decodePreviewImg.src = dataUrl;
+        this.decodePreviewSection.style.display = "block";
+      }
+
+      // 解码二维码
+      this.decodeQRCode(dataUrl);
+    };
+
+    reader.onerror = () => {
+      window.showStatusMessage("读取文件失败", "error");
+    };
+
+    reader.readAsDataURL(file);
+  },
+
+  /**
+   * 解码二维码（使用在线 API）
+   */
+  async decodeQRCode(dataUrl) {
+    window.showStatusMessage("正在解码...", "loading", 0);
+
+    try {
+      // 使用 qrserver.com 的解码 API
+      // 需要将图片上传到服务器
+      const blob = await this.dataUrlToBlob(dataUrl);
+      const formData = new FormData();
+      formData.append("file", blob, "qrcode.png");
+
+      const response = await fetch(
+        "https://api.qrserver.com/v1/read-qr-code/",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("解码服务请求失败");
+      }
+
+      const data = await response.json();
+
+      if (data && data[0] && data[0].symbol && data[0].symbol[0]) {
+        const result = data[0].symbol[0];
+
+        if (result.error) {
+          throw new Error(result.error);
+        }
+
+        const decodedData = result.data;
+        this.decodeResultEl.value = decodedData;
+        window.showStatusMessage("解码成功！", "success");
+      } else {
+        throw new Error("无法解析二维码");
+      }
+    } catch (error) {
+      console.error("解码失败:", error);
+      window.showStatusMessage(`解码失败: ${error.message}`, "error");
+      this.decodeResultEl.value = "";
+    }
+  },
+
+  /**
+   * 将 DataURL 转换为 Blob
+   */
+  async dataUrlToBlob(dataUrl) {
+    const response = await fetch(dataUrl);
+    return await response.blob();
+  },
+
+  /**
+   * 复制解码结果
+   */
+  async copyDecodeResult() {
+    const result = this.decodeResultEl.value;
+
+    if (!result) {
+      window.showStatusMessage("没有可复制的内容", "error");
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(result);
+      window.showStatusMessage("已复制到剪贴板！", "success");
+    } catch (error) {
+      window.showStatusMessage("复制失败", "error");
+    }
+  },
+
+  /**
+   * 打开解码结果（如果是链接）
+   */
+  openDecodeResult() {
+    const result = this.decodeResultEl.value;
+
+    if (!result) {
+      window.showStatusMessage("没有可打开的内容", "error");
+      return;
+    }
+
+    // 检查是否是有效的 URL
+    try {
+      new URL(result);
+      chrome.tabs.create({ url: result });
+    } catch {
+      // 尝试添加 https://
+      try {
+        const url = "https://" + result;
+        new URL(url);
+        chrome.tabs.create({ url });
+      } catch {
+        window.showStatusMessage("解码结果不是有效的链接", "error");
+      }
+    }
   },
 };

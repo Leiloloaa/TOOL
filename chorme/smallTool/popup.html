@@ -9,14 +9,18 @@
   <body>
     <div class="container">
       <header class="header">
-        <h1>🔧 小工具集合</h1>
+        <h1>前端开发小工具</h1>
       </header>
 
       <nav class="tool-nav">
-        <button class="tool-tab active" data-tool="translator">翻译工具</button>
+        <button class="tool-tab active" data-tool="translator">中英文翻译</button>
         <button class="tool-tab" data-tool="camelcase">小驼峰转换</button>
-        <button class="tool-tab" data-tool="qrcode">二维码生成</button>
-        <!-- 未来可以添加更多工具标签 -->
+        <button class="tool-tab" data-tool="qrcode">二维码生成/解码</button>
+        <button class="tool-tab" data-tool="json">JSON</button>
+        <button class="tool-tab" data-tool="timestamp">时间戳转换</button>
+        <button class="tool-tab" data-tool="base64img">图片转 Base64</button>
+        <button class="tool-tab" data-tool="password">随机密码生成</button>
+        <button class="tool-tab" data-tool="darkmode">网页暗黑模式</button>
       </nav>
 
       <main class="tool-content">
@@ -80,45 +84,295 @@
           <div id="camelcase-status-message" class="status-message"></div>
         </div>
 
-        <!-- 二维码生成工具 -->
+        <!-- 二维码工具 -->
         <div id="qrcode-tool" class="tool-panel">
-          <div class="qrcode-output-section">
-            <div id="qrcode-canvas" class="qrcode-canvas-container">
-              <p class="qrcode-placeholder">二维码将显示在这里</p>
+          <div class="qrcode-mode-tabs">
+            <button class="qrcode-mode-tab active" data-mode="generate">
+              生成二维码
+            </button>
+            <button class="qrcode-mode-tab" data-mode="decode">
+              解码二维码
+            </button>
+          </div>
+
+          <!-- 生成模式 -->
+          <div id="qrcode-generate-mode" class="qrcode-mode-panel active">
+            <div class="qrcode-output-section">
+              <div id="qrcode-canvas" class="qrcode-canvas-container">
+                <p class="qrcode-placeholder">二维码将显示在这里</p>
+              </div>
+              <button
+                id="qrcode-download-btn"
+                class="secondary-btn"
+                style="display: none; margin-top: 10px; width: 100%"
+              >
+                下载二维码
+              </button>
             </div>
-            <button
-              id="qrcode-download-btn"
-              class="secondary-btn"
-              style="display: none; margin-top: 10px; width: 100%"
+            <div class="input-section">
+              <label for="qrcode-url-input">链接地址：</label>
+              <div class="input-with-button">
+                <input
+                  type="text"
+                  id="qrcode-url-input"
+                  placeholder="自动获取当前页面链接，或手动输入..."
+                  class="url-input"
+                />
+                <button
+                  id="qrcode-get-current-btn"
+                  class="secondary-btn small-btn"
+                >
+                  获取当前
+                </button>
+              </div>
+            </div>
+            <div class="button-section">
+              <button id="qrcode-generate-btn" class="primary-btn">
+                生成二维码
+              </button>
+              <button id="qrcode-clear-btn" class="secondary-btn">清空</button>
+            </div>
+          </div>
+
+          <!-- 解码模式 -->
+          <div id="qrcode-decode-mode" class="qrcode-mode-panel">
+            <div class="upload-section">
+              <label for="qrcode-upload" class="upload-label">
+                <span class="upload-icon">📷</span>
+                <span>点击选择二维码图片</span>
+                <input type="file" id="qrcode-upload" accept="image/*" hidden />
+              </label>
+            </div>
+            <div
+              class="decode-preview-section"
+              id="decode-preview-section"
+              style="display: none"
             >
-              下载二维码
+              <img id="decode-preview" src="" alt="预览" />
+            </div>
+            <div class="output-section">
+              <label>解码结果：</label>
+              <textarea
+                id="qrcode-decode-result"
+                rows="3"
+                readonly
+                placeholder="解码结果将显示在这里..."
+              ></textarea>
+            </div>
+            <div class="button-section">
+              <button id="qrcode-decode-copy-btn" class="primary-btn">
+                复制结果
+              </button>
+              <button id="qrcode-decode-open-btn" class="secondary-btn">
+                打开链接
+              </button>
+            </div>
+          </div>
+
+          <div id="qrcode-status-message" class="status-message"></div>
+        </div>
+
+        <!-- JSON 美化工具 -->
+        <div id="json-tool" class="tool-panel">
+          <div class="tool-header">
+            <h2>JSON 美化</h2>
+          </div>
+          <div class="input-section">
+            <label for="json-input">输入 JSON：</label>
+            <textarea
+              id="json-input"
+              placeholder="粘贴 JSON 字符串..."
+              rows="6"
+            ></textarea>
+          </div>
+          <div class="button-section">
+            <button id="json-format-btn" class="primary-btn">
+              格式化并打开
+            </button>
+            <button id="json-minify-btn" class="secondary-btn">压缩</button>
+            <button id="json-clear-btn" class="secondary-btn">清空</button>
+          </div>
+          <div id="json-status-message" class="status-message"></div>
+        </div>
+
+        <!-- 时间戳转换工具 -->
+        <div id="timestamp-tool" class="tool-panel">
+          <div class="tool-header">
+            <h2>时间戳转换</h2>
+          </div>
+          <div class="timestamp-current">
+            <span>当前时间戳：</span>
+            <span id="current-timestamp" class="timestamp-value">--</span>
+            <button id="copy-timestamp-btn" class="secondary-btn small-btn">
+              复制
             </button>
           </div>
           <div class="input-section">
-            <label for="qrcode-url-input">链接地址：</label>
-            <div class="input-with-button">
+            <label for="timestamp-input">时间戳 (秒/毫秒)：</label>
+            <input
+              type="text"
+              id="timestamp-input"
+              placeholder="输入时间戳..."
+              class="url-input"
+            />
+          </div>
+          <div class="button-section">
+            <button id="timestamp-to-date-btn" class="primary-btn">
+              转为日期
+            </button>
+          </div>
+          <div class="output-section">
+            <label>转换结果：</label>
+            <input
+              type="text"
+              id="timestamp-result"
+              class="url-input"
+              readonly
+            />
+          </div>
+          <div class="input-section" style="margin-top: 16px">
+            <label for="date-input">日期时间：</label>
+            <input type="datetime-local" id="date-input" class="url-input" />
+          </div>
+          <div class="button-section">
+            <button id="date-to-timestamp-btn" class="primary-btn">
+              转为时间戳
+            </button>
+          </div>
+          <div id="timestamp-status-message" class="status-message"></div>
+        </div>
+
+        <!-- 图片转 Base64 工具 -->
+        <div id="base64img-tool" class="tool-panel">
+          <div class="tool-header">
+            <h2>图片转 Base64</h2>
+          </div>
+          <div class="upload-section">
+            <label for="image-upload" class="upload-label">
+              <span class="upload-icon">📁</span>
+              <span>点击选择图片或拖拽到此处</span>
+              <input type="file" id="image-upload" accept="image/*" hidden />
+            </label>
+          </div>
+          <div
+            class="image-preview-section"
+            id="image-preview-section"
+            style="display: none"
+          >
+            <img id="image-preview" src="" alt="预览" />
+          </div>
+          <div class="output-section">
+            <label>Base64 结果：</label>
+            <textarea
+              id="base64-output"
+              rows="4"
+              readonly
+              placeholder="Base64 编码将显示在这里..."
+            ></textarea>
+          </div>
+          <div class="button-section">
+            <button id="base64-copy-btn" class="primary-btn">
+              复制 Base64
+            </button>
+            <button id="base64-clear-btn" class="secondary-btn">清空</button>
+          </div>
+          <div id="base64img-status-message" class="status-message"></div>
+        </div>
+
+        <!-- 随机密码生成器 -->
+        <div id="password-tool" class="tool-panel">
+          <div class="tool-header">
+            <h2>随机密码生成</h2>
+          </div>
+          <div class="password-options">
+            <label class="option-item">
+              <span>密码长度：</span>
+              <input
+                type="range"
+                id="password-length"
+                min="6"
+                max="32"
+                value="16"
+              />
+              <span id="password-length-value">16</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" id="password-uppercase" checked />
+              <span>大写字母 (A-Z)</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" id="password-lowercase" checked />
+              <span>小写字母 (a-z)</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" id="password-numbers" checked />
+              <span>数字 (0-9)</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" id="password-symbols" checked />
+              <span>符号 (!@#$%...)</span>
+            </label>
+          </div>
+          <div class="output-section">
+            <label>生成的密码：</label>
+            <div class="password-output-wrapper">
               <input
                 type="text"
-                id="qrcode-url-input"
-                placeholder="自动获取当前页面链接，或手动输入链接..."
-                class="url-input"
+                id="password-output"
+                class="url-input password-display"
+                readonly
               />
-              <button
-                id="qrcode-get-current-btn"
-                class="secondary-btn small-btn"
-                title="点击获取当前标签页的 URL"
-              >
-                获取当前页面
+              <button id="password-toggle-btn" class="secondary-btn small-btn">
+                显示
               </button>
             </div>
           </div>
           <div class="button-section">
-            <button id="qrcode-generate-btn" class="primary-btn">
-              生成二维码
+            <button id="password-generate-btn" class="primary-btn">
+              生成密码
             </button>
-            <button id="qrcode-clear-btn" class="secondary-btn">清空</button>
+            <button id="password-copy-btn" class="secondary-btn">复制</button>
           </div>
-          <div id="qrcode-status-message" class="status-message"></div>
+          <div id="password-status-message" class="status-message"></div>
+        </div>
+
+        <!-- 暗黑模式工具 -->
+        <div id="darkmode-tool" class="tool-panel">
+          <div class="tool-header">
+            <h2>🌙 暗黑模式</h2>
+          </div>
+          <div class="darkmode-description">
+            <p>点击下方按钮，为当前浏览的页面切换暗黑模式</p>
+          </div>
+          <div class="darkmode-toggle-section">
+            <button id="darkmode-toggle-btn" class="darkmode-btn">
+              <span class="darkmode-icon">🌙</span>
+              <span class="darkmode-text">开启暗黑模式</span>
+            </button>
+          </div>
+          <div class="darkmode-options">
+            <label class="option-item">
+              <input
+                type="range"
+                id="darkmode-brightness"
+                min="0"
+                max="100"
+                value="90"
+              />
+              <span>亮度: <span id="brightness-value">90</span>%</span>
+            </label>
+            <label class="option-item">
+              <input
+                type="range"
+                id="darkmode-contrast"
+                min="80"
+                max="120"
+                value="100"
+              />
+              <span>对比度: <span id="contrast-value">100</span>%</span>
+            </label>
+          </div>
+          <div id="darkmode-status-message" class="status-message"></div>
         </div>
 
         <!-- 未来可以添加更多工具面板 -->
@@ -128,6 +382,11 @@
     <script src="tools/translator.js"></script>
     <script src="tools/camelCase.js"></script>
     <script src="tools/qrcode.js"></script>
+    <script src="tools/json.js"></script>
+    <script src="tools/timestamp.js"></script>
+    <script src="tools/base64img.js"></script>
+    <script src="tools/password.js"></script>
+    <script src="tools/darkmode.js"></script>
     <script src="popup.js"></script>
   </body>
 </html>

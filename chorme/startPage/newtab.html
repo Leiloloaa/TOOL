@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>新标签页</title>
+    <link rel="stylesheet" href="newtab.css" />
+    <link rel="stylesheet" href="components/calendar.css" />
+    <link rel="stylesheet" href="components/countdown.css" />
+  </head>
+  <body>
+    <!-- 动态壁纸背景 -->
+    <div id="wallpaper-container">
+      <video id="video-wallpaper" autoplay muted loop playsinline></video>
+      <div id="wallpaper-overlay"></div>
+    </div>
+
+    <!-- 主内容区域 -->
+    <main class="main-content">
+      <!-- 时间日期显示 -->
+      <div class="datetime-container">
+        <div class="time" id="time">00:00</div>
+        <div class="date" id="date">2024年1月1日 星期一</div>
+        <div class="lunar-date" id="lunar-date"></div>
+      </div>
+
+      <!-- 搜索框 -->
+      <div class="search-container">
+        <div class="search-box">
+          <div class="search-engine-selector" id="engine-selector">
+            <img src="" alt="" id="engine-icon" class="engine-icon" />
+            <span id="engine-name">Google</span>
+            <svg
+              class="dropdown-arrow"
+              viewBox="0 0 24 24"
+              width="16"
+              height="16"
+            >
+              <path fill="currentColor" d="M7 10l5 5 5-5z" />
+            </svg>
+          </div>
+          <input
+            type="text"
+            id="search-input"
+            placeholder="搜索..."
+            autocomplete="off"
+          />
+          <button id="search-btn" class="search-btn">
+            <svg viewBox="0 0 24 24" width="20" height="20">
+              <path
+                fill="currentColor"
+                d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+              />
+            </svg>
+          </button>
+        </div>
+        <!-- 搜索引擎下拉菜单 -->
+        <div class="engine-dropdown" id="engine-dropdown">
+          <div class="engine-option" data-engine="google">
+            <img src="https://www.google.com/favicon.ico" alt="Google" />
+            <span>Google</span>
+          </div>
+          <div class="engine-option" data-engine="bing">
+            <img src="https://www.bing.com/favicon.ico" alt="Bing" />
+            <span>Bing</span>
+          </div>
+          <div class="engine-option" data-engine="baidu">
+            <img src="https://www.baidu.com/favicon.ico" alt="百度" />
+            <span>百度</span>
+          </div>
+          <div class="engine-option" data-engine="duckduckgo">
+            <img src="https://duckduckgo.com/favicon.ico" alt="DuckDuckGo" />
+            <span>DuckDuckGo</span>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- 组件区域（组件模式下显示） -->
+    <div class="widgets-container" id="widgets-container">
+      <div class="widget calendar-widget" id="calendar-widget">
+        <div class="widget-header">
+          <span class="widget-title">📅 日历</span>
+          <button class="widget-close" data-widget="calendar">×</button>
+        </div>
+        <div class="widget-content" id="calendar-content"></div>
+      </div>
+
+      <div class="widget countdown-widget" id="countdown-widget">
+        <div class="widget-header">
+          <span class="widget-title">⏰ 倒计时</span>
+          <button class="widget-close" data-widget="countdown">×</button>
+        </div>
+        <div class="widget-content" id="countdown-content"></div>
+      </div>
+    </div>
+
+    <!-- 底部诗句 -->
+    <footer class="footer">
+      <p class="poem" id="poem">加载中...</p>
+    </footer>
+
+    <!-- 设置按钮 -->
+    <div class="settings-toggle" id="settings-toggle">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <path
+          fill="currentColor"
+          d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"
+        />
+      </svg>
+    </div>
+
+    <!-- 设置面板 -->
+    <div class="settings-panel" id="settings-panel">
+      <div class="settings-header">
+        <h2>设置</h2>
+        <button class="settings-close" id="settings-close">×</button>
+      </div>
+      <div class="settings-content">
+        <!-- 模式切换 -->
+        <div class="setting-item">
+          <label>显示模式</label>
+          <div class="setting-options">
+            <button class="mode-btn active" data-mode="minimal">
+              极简模式
+            </button>
+            <button class="mode-btn" data-mode="widgets">组件模式</button>
+          </div>
+        </div>
+
+        <!-- 壁纸设置 -->
+        <div class="setting-item">
+          <label>壁纸类型</label>
+          <div class="setting-options">
+            <button class="wallpaper-type-btn active" data-type="video">
+              动态壁纸
+            </button>
+            <button class="wallpaper-type-btn" data-type="image">
+              静态壁纸
+            </button>
+          </div>
+        </div>
+
+        <!-- 壁纸选择 -->
+        <div class="setting-item">
+          <label>选择壁纸</label>
+          <div class="wallpaper-grid" id="wallpaper-grid">
+            <!-- 动态填充 -->
+          </div>
+        </div>
+
+        <!-- 组件设置（组件模式下显示） -->
+        <div class="setting-item widget-settings" id="widget-settings">
+          <label>显示组件</label>
+          <div class="widget-toggles">
+            <label class="toggle-label">
+              <input type="checkbox" id="toggle-calendar" checked />
+              <span>日历</span>
+            </label>
+            <label class="toggle-label">
+              <input type="checkbox" id="toggle-countdown" checked />
+              <span>倒计时</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- 倒计时设置 -->
+        <div class="setting-item countdown-settings" id="countdown-settings">
+          <label id="countdown-form-label">添加倒计时</label>
+          <div class="countdown-form">
+            <input type="text" id="countdown-title" placeholder="事件名称" />
+            <input type="datetime-local" id="countdown-datetime" />
+            <div class="countdown-form-buttons">
+              <button id="add-countdown" class="btn-primary">添加</button>
+              <button
+                id="cancel-edit-countdown"
+                class="btn-secondary"
+                style="display: none"
+              >
+                取消
+              </button>
+            </div>
+          </div>
+          <div class="countdown-manage-list" id="countdown-manage-list">
+            <!-- 动态填充 -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 脚本 -->
+    <script src="data/poems.js"></script>
+    <script src="data/wallpapers.js"></script>
+    <script src="data/lunar.js"></script>
+    <script src="data/holidays.js"></script>
+    <script src="components/calendar.js"></script>
+    <script src="components/countdown.js"></script>
+    <script src="newtab.js"></script>
+  </body>
+</html>
